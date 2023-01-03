@@ -28,7 +28,7 @@ class Simulation:
         self.params.update({"susc": susceptibility})
 
         r0generator = R0Generator(param=self.params)
-        self.beta = np.float(base_r0 / r0generator.get_eig_val(self.contact_matrix))
+        self.beta = float(base_r0 / r0generator.get_eig_val(self.contact_matrix))
         self.params.update({"beta": self.beta})
 
         # Initial values for model

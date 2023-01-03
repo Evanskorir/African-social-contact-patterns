@@ -17,7 +17,7 @@ class R0Generator:
         self.v_inv = None
         self.__get_v()
 
-    def get_eig_val(self, contact_mtx: np.array) -> np.float:
+    def get_eig_val(self, contact_mtx: np.array) -> float:
         f = self.__get_f(contact_mtx)
         return np.linalg.eig(np.dot(f, self.v_inv))[0][0]
 
