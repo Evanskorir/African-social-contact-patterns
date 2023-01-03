@@ -78,4 +78,3 @@ class D2PCA:
 
         # Now reshape the matrix to get desired 39 * 4
         self.pca_reduced = matrix.reshape((32, 4))
-

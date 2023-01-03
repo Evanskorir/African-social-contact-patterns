@@ -58,7 +58,7 @@ def kenya_contacts(data_tr):
     age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
 
     plt.figure(figsize=(10, 8))
-    full = plt.imshow(data_tr.full_contacts['Kenya']['contact_full'],
+    full = plt.imshow(data_tr.full_contacts['Kenya']['contact_full'].T,
                       cmap='jet', alpha=.9, interpolation="nearest")
     ticks = np.arange(0, 6)
     cbar = plt.colorbar(full)
@@ -67,22 +67,26 @@ def kenya_contacts(data_tr):
 
     plt.xticks(ticks=ticks, labels=age_group, rotation=45)
     plt.yticks(ticks=ticks, labels=age_group, rotation=0)
-    plt.title("All", fontsize=15)
+    # plt.title("All", fontsize=15)
+    plt.gca().invert_yaxis()
     plt.xlabel("Age")
     plt.ylabel("Age")
     plt.savefig("../plots/" + "All.pdf")
 
+
 def country_contacts(data_tr):
-    for country in ["Morocco", "Rwanda", "Liberia"]:
+    for country in ["Ethiopia", "Algeria", "Burkina Faso"]:
         age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
         matrix_to_plot = data_tr.full_contacts[country]["contact_full"] * data_tr.full_contacts[country]["beta"]
-        img = plt.imshow(matrix_to_plot,
+        img = plt.imshow(matrix_to_plot.T,
                          cmap='jet', vmin=0, vmax=0.9,
                          alpha=.9, interpolation="nearest")
         ticks = np.arange(0, 6)
-        plt.xticks(ticks=ticks, labels=age_group, rotation=45)
+
         plt.yticks(ticks=ticks, labels=age_group, rotation=0)
-        if country == "Liberia":
+        plt.xticks(ticks=ticks, labels=age_group, rotation=45)
+        plt.gca().invert_yaxis()
+        if country == "Burkina Faso":
             cbar = plt.colorbar(img)
             tick_font_size = 25
             cbar.ax.tick_params(labelsize=tick_font_size)
@@ -90,8 +94,8 @@ def country_contacts(data_tr):
 
 
 def main():
-    do_clustering_pca = True
-    do_clustering_dpca = True
+    do_clustering_pca = False
+    do_clustering_dpca = False
 
     # Create data for clustering
     susc = 1.0
@@ -100,14 +104,13 @@ def main():
 
     # execute class indicators
     ind = Indicators(data_tr=data_tr, country_names=data_tr.country_names)
-    ind.PCA_apply()
-    # ind.corr_pcs()
-    # ind.dendogram_pca()
-    # ind.project_2D()
-    # ind.plot_countries()
+    ind.pca_apply()
+    ind.corr_pcs()
+    ind.dendogram_pca()
+    ind.project_2d()
+    ind.plot_countries()
 
-    # Create plots for the paper
-    # kenya_contacts(data_tr=data_tr)
+    kenya_contacts(data_tr=data_tr)
     country_contacts(data_tr=data_tr)
 
     # do analysis for original data
@@ -129,4 +132,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

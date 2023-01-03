@@ -25,7 +25,7 @@ class Indicators:
         sns.heatmap(country.corr(), cmap="rainbow")
         plt.savefig("../plots/" + "corr.pdf")
 
-    def PCA_apply(self):
+    def pca_apply(self):
         # Standardization technique for scaling
         scaler = StandardScaler()
         country_data_scaled = scaler.fit_transform(self.data_tr.indicator_data)
@@ -34,7 +34,7 @@ class Indicators:
 
         # Variance Ratio bar plot for each PCA components.
         plt.figure(figsize=(10, 6))
-        ax = plt.bar(range(1, len(pca.explained_variance_ratio_) + 1), pca.explained_variance_ratio_)
+        plt.bar(range(1, len(pca.explained_variance_ratio_) + 1), pca.explained_variance_ratio_)
         plt.xlabel("PCA Components", fontweight='bold')
         plt.ylabel("Variance Ratio", fontweight='bold')
         plt.savefig("../plots/" + "variance.pdf")
@@ -42,8 +42,8 @@ class Indicators:
         # Scree plot to visualize the Cumulative variance against the Number of components
         plt.figure(figsize=(10, 6))
         plt.plot(np.cumsum(pca.explained_variance_ratio_))
-        plt.vlines(x=6, ymax=1, ymin=0, colors="r", linestyles="--")
-        plt.hlines(y=0.78, xmax=15, xmin=0, colors="g", linestyles="--")
+        plt.vlines(x=3, ymax=1, ymin=0, colors="r", linestyles="--")
+        plt.hlines(y=0.61, xmax=15, xmin=0, colors="g", linestyles="--")
         plt.xlabel('Number of PCA components')
         plt.ylabel('Cumulative Explained Variance')
         plt.savefig("../plots/" + "exp variance.pdf")
@@ -55,13 +55,13 @@ class Indicators:
         self.pca_data = pca_data
         self.pca2 = pca2
         # Let's check the variance ratios
-        print("\n cumulative variance explained by PCs:", np.cumsum(pca2.explained_variance_ratio_))
-        print("\n explained variance explained by PCs:", pca2.explained_variance_ratio_)
+        print("\n cumulative variance explained by indicators:", np.cumsum(pca2.explained_variance_ratio_))
+        print("\n explained variance explained by indicator:", pca2.explained_variance_ratio_)
 
     def dendogram_pca(self):
         # Hierarchical clustering based on only the indicators
         fig, axes = plt.subplots(1, 1, figsize=(40, 25), dpi=150)
-        sch.dendrogram(sch.linkage(self.pca_data, method="complete"), color_threshold=9, get_leaves=True,
+        sch.dendrogram(sch.linkage(self.pca_data, method="complete"), color_threshold=8, get_leaves=True,
                        leaf_rotation=90, leaf_font_size=32, show_leaf_counts=True, orientation="top",
                        distance_sort=True, labels=self.data_tr.country_names)
         plt.title('Hierarchical Clustering Dendrogram', fontsize=44, fontweight="bold")
@@ -72,7 +72,8 @@ class Indicators:
     def corr_pcs(self):
         a = pd.DataFrame(self.data_tr.indicator_data)
         b = a.columns
-        plt.figure(figsize=(8, 6))
+        print(b)
+        plt.figure(figsize=(14, 12))
         ax = plt.gca()
         ax = plt.imshow(self.pca2.components_, cmap='jet',
                         alpha=.9, interpolation="nearest")
@@ -80,13 +81,13 @@ class Indicators:
         plt.colorbar(ax, orientation='horizontal', ticks=[self.pca2.components_.min(), 0,
                                                           self.pca2.components_.max()], pad=0.6)
         plt.xticks(ticks=np.arange(len(b)), labels=feature_names,
-                   rotation=90)
+                   rotation=90, fontsize=20)
         plt.yticks(ticks=np.arange(0, 4),
-                   labels=['PC1', 'PC2', 'PC3', 'PC4'], rotation=0, fontsize=12)
+                   labels=['PC1', 'PC2', 'PC3', 'PC4'], rotation=0, fontsize=20)
 
         plt.savefig("../plots/" + "components.pdf")
 
-    def project_2D(self):
+    def project_2d(self):
         # put feature values into dataframe
         stand = StandardScaler()
         scaled = stand.fit_transform(self.data_tr.indicator_data)
@@ -128,16 +129,16 @@ class Indicators:
     def plot_countries(self):
         # Params
         n_samples = 32  # number of countries
-        m_features = 28  # number of economic indicators
-        selected_names = self.country_names
+        # m_features = 28  # number of economic indicators
+        # selected_names = self.country_names
 
         # Generate
         np.random.seed(42)
         names = self.country_names
         labels = [np.random.choice(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
                                     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
-                                    'Z', '1', '2', '3', '4', '5', '6']) for i in range(n_samples)]
-        features = np.random.random((n_samples, m_features))
+                                    'Z', '1', '2', '3', '4', '5', '6']) for _ in range(n_samples)]
+        # features = np.random.random((n_samples, m_features))
 
         # Label to color dict (manual)
         label_color_dict = {'A': 'red', 'B': 'peru', 'C': 'blue', 'D': 'magenta',
@@ -175,10 +176,3 @@ class Indicators:
         plt.ylabel('Second Dim (10.6%)')
 
         plt.savefig("../plots/" + "countries projection.pdf")
-
-
-
-
-
-
-

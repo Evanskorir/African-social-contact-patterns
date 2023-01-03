@@ -58,7 +58,7 @@ class Hierarchical:
                    rotation=0, fontsize=39)
         plt.title("Measure of closeness  between countries before reordering",
                   fontsize=42, fontweight="bold")
-        az = plt.imshow(distance, cmap="Spectral",
+        az = plt.imshow(distance, cmap="jet",
                         interpolation="nearest",
                         vmin=0)
         cbar = plt.colorbar(az)
@@ -148,4 +148,3 @@ class Hierarchical:
         plt.tight_layout()
         axes.tick_params(axis='both', which='major', labelsize=26)
         plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_3.pdf")
-

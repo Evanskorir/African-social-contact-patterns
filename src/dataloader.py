@@ -134,8 +134,8 @@ class DataLoader:
 
     def _get_indicators_data(self):
         # use pandas to load the social_economic data
-        Indicators = pd.read_excel("../data/Indicators.xls", index_col=0)
-        self.indicators_data = Indicators
+        indicators = pd.read_excel("../data/Indicators.xls", index_col=0)
+        self.indicators_data = indicators
 
     def _transform_matrix(self, matrix: np.ndarray, country: str):
         """
@@ -147,4 +147,3 @@ class DataLoader:
         matrix_1 = matrix * age_distribution
         output = (matrix_1 + matrix_1.T) / (2 * age_distribution)  # we symmetrize the matrix by the formula
         return output
-

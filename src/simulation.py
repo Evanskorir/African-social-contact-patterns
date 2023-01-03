@@ -21,7 +21,7 @@ class Simulation:
         # Set parameters
         self.data = data
         self.contact_matrix = contact_matrix
-        #self.contact_home = contact_home
+        # self.contact_home = contact_home
         self.age_vector = age_vector
 
         self.params = self.data.model_parameters_data
@@ -47,22 +47,6 @@ class Simulation:
                    "d": [0, 0, 0, 0, 0, 0],
                    "r": [0, 0, 0, 0, 0, 0],
                    "c": [0, 0, 0, 0, 0, 0]}
-
-        # self.iv = {"l1": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "l2": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "ip": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "ia1": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "ia2": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "ia3": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "is1": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "is2": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "is3": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "ih": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "ic": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "icr": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "d": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "r": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        #            "c": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]}
 
         self.iv.update({"s": self.data.global_unit_set["age"] - self.iv["l1"]})
 
@@ -100,4 +84,3 @@ class Simulation:
         model = RostHungaryModel(init_values=self.iv, contact_matrix=np.reshape(vector, (6, 6)),
                                  parameters=self.params, to_solve=True)
         return model.solution
-

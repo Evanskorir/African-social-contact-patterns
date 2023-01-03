@@ -30,12 +30,10 @@ class Contacts:
 
     def get_contacts(self):
         for country in self.country_names:
-            # contacts = [self.data.contact_data[country]["HOME"],
-            #             self.data.contact_data[country]["SCHOOL"],
-            #             self.data.contact_data[country]["WORK"],
-            #             self.data.contact_data[country]["OTHER"],
-            contacts = [self.data.contact_data[country]["HOME"] + self.data.contact_data[country]["SCHOOL"] +
-                        self.data.contact_data[country]["WORK"] + self.data.contact_data[country]["OTHER"]]
+            contacts = [self.data.contact_data[country]["OTHER"] +
+                        self.data.contact_data[country]["SCHOOL"] +
+                        self.data.contact_data[country]["WORK"] +
+                        self.data.contact_data[country]["OTHER"]]
 
             for contact in contacts:
                 age_vector = self.data.age_data[country]["age"].reshape((-1, 1))
@@ -44,29 +42,29 @@ class Contacts:
                 age_3 = age_vector[3]
                 age_4 = age_vector[4]
                 age_5 = age_vector[5] + age_vector[6] + age_vector[7] + age_vector[8] + age_vector[9] +\
-                        age_vector[10] + age_vector[11] + age_vector[12]
+                    age_vector[10] + age_vector[11] + age_vector[12]
                 age_6 = age_vector[13] + age_vector[14] + age_vector[15]
 
                 # first column
                 # age group 0-4, 0-4
                 col_0_0 = contact[0, 0]
                 # age group 5-14, 0-4
-                col_1_0 = (contact[1, 0] * age_vector[1]
-                           + contact[2, 0] * age_vector[2]) / age_2
+                col_1_0 = (contact[1, 0] * age_vector[0]
+                           + contact[2, 0] * age_vector[0]) / age_1
                 # age group 15-19, 0-4
                 col_2_0 = contact[3, 0]
 
                 # age group 20-24, 0-4
                 col_3_0 = contact[4, 0]
                 # age group 25-64, 0-4
-                col_4_0 = (contact[5, 0] * age_vector[5] + contact[6, 0] * age_vector[6] +
-                           contact[7, 0] * age_vector[7] + contact[8, 0] * age_vector[8] +
-                           contact[9, 0] * age_vector[9] + contact[10, 0] * age_vector[10] +
-                           contact[11, 0] * age_vector[11] + contact[12, 3] * age_vector[12]) / age_5
+                col_4_0 = (contact[5, 0] * age_vector[0] + contact[6, 0] * age_vector[0] +
+                           contact[7, 0] * age_vector[0] + contact[8, 0] * age_vector[0] +
+                           contact[9, 0] * age_vector[0] + contact[10, 0] * age_vector[0] +
+                           contact[11, 0] * age_vector[0] + contact[12, 0] * age_vector[0]) / age_1
 
                 # age group 65+, 0-4
-                col_5_0 = ((contact[13:14, 0:1] * age_vector[1] +
-                            (contact[14:15, 0:1] * age_vector[1]) + contact[15:16, 0:1] * age_vector[1])) / age_2
+                col_5_0 = ((contact[13:14, 0:1] * age_vector[0] +
+                            (contact[14:15, 0:1] * age_vector[0]) + contact[15:16, 0:1] * age_vector[0])) / age_1
 
                 # second column
                 # age group 0-4, 5-14
@@ -95,37 +93,37 @@ class Contacts:
                 # age group 0-4, 15-19
                 col_0_2 = contact[0, 3]
                 # age group 5-14, 15-19
-                col_1_2 = (contact[1, 3] * age_vector[3] + contact[2, 3] * age_vector[3]) / age_2
+                col_1_2 = (contact[1, 3] * age_vector[3] + contact[2, 3] * age_vector[3]) / age_vector[3]
                 # age group 15-19, 15-19
                 col_2_2 = contact[3, 3]
                 # age group 20-24, 15-19
                 col_3_2 = contact[4, 3]
-                col_4_2 = (contact[5, 3] * age_vector[5] + contact[6, 3] * age_vector[6] +
-                           contact[7, 3] * age_vector[7] + contact[8, 3] * age_vector[8] +
-                           contact[9, 3] * age_vector[9] + contact[10, 3] * age_vector[10] +
-                           contact[11, 3] * age_vector[11] + contact[12, 3] * age_vector[12]) / age_5
+                col_4_2 = (contact[5, 3] * age_vector[3] + contact[6, 3] * age_vector[3] +
+                           contact[7, 3] * age_vector[3] + contact[8, 3] * age_vector[3] +
+                           contact[9, 3] * age_vector[3] + contact[10, 3] * age_vector[3] +
+                           contact[11, 3] * age_vector[3] + contact[12, 3] * age_vector[3]) / age_vector[3]
 
-                col_5_2 = (contact[13, 3] * age_vector[13] + contact[14, 3] * age_vector[14] +
-                           contact[15, 3] * age_vector[15]) / age_6
+                col_5_2 = (contact[13, 3] * age_vector[3] + contact[14, 3] * age_vector[3] +
+                           contact[15, 3] * age_vector[3]) / age_vector[3]
 
                 # 4th column
                 # age group 0-4, 20-24
                 col_0_3 = contact[0, 4]
                 # age group 5-14, 20-24
                 col_1_3 = (contact[1, 4] * age_vector[4] +
-                           contact[2, 4] * age_vector[4]) / age_2
+                           contact[2, 4] * age_vector[4]) / age_vector[4]
                 # age group 15-19, 20-24
                 col_2_3 = contact[3, 4]
                 # age group 20-24, 15-19
                 col_3_3 = contact[4, 4]
-                col_4_3 = (contact[5, 4] * age_vector[5] + contact[6, 4] * age_vector[6] +
-                           contact[7, 4] * age_vector[7] + contact[8, 4] * age_vector[8] +
-                           contact[9, 4] * age_vector[9] + contact[10, 4] * age_vector[10] +
-                           contact[11, 4] * age_vector[11] + contact[12, 4] * age_vector[12]) / age_5
+                col_4_3 = (contact[5, 4] * age_vector[4] + contact[6, 4] * age_vector[4] +
+                           contact[7, 4] * age_vector[4] + contact[8, 4] * age_vector[4] +
+                           contact[9, 4] * age_vector[4] + contact[10, 4] * age_vector[4] +
+                           contact[11, 4] * age_vector[4] + contact[12, 4] * age_vector[4]) / age_vector[4]
 
-                col_5_3 = (contact[13, 4] * age_vector[13] +
-                           contact[14, 4] * age_vector[14] +
-                           contact[15, 4] * age_vector[15]) / age_6
+                col_5_3 = (contact[13, 4] * age_vector[4] +
+                           contact[14, 4] * age_vector[4] +
+                           contact[15, 4] * age_vector[4]) / age_vector[4]
 
                 # 5th column
                 col_0_4 = ((contact[0, 5] * age_vector[5] + contact[0, 6] * age_vector[6] +
@@ -163,41 +161,38 @@ class Contacts:
                             contact[10, 8] + contact[11, 8] + contact[12, 8]) * age_vector[8] +
                            (contact[5, 9] + contact[6, 9] + contact[7, 9] + contact[8, 9] + contact[9, 9] +
                             contact[10, 9] + contact[11, 9] + contact[12, 9]) * age_vector[9] +
-                           (contact[10, 5] + contact[10, 6] + contact[10, 7] + contact[10, 8] + contact[10, 9] +
+                           (contact[5, 10] + contact[6, 10] + contact[7, 10] + contact[8, 10] + contact[9, 10] +
                             contact[10, 10] + contact[11, 10] + contact[12, 10]) * age_vector[10] +
-                           (contact[11, 5] + contact[11, 6] + contact[11, 7] +
-                            contact[11, 8] + contact[11, 9] + contact[11, 10] + contact[11, 11] +
-                            contact[11, 12]) * age_vector[11] +
-                           (contact[12, 5] + contact[12, 6] + contact[12, 7] + contact[12, 8] + contact[12, 9] +
-                            contact[12, 10] + contact[12, 11] + contact[12, 12]) * age_vector[12]) / age_5
+                           (contact[5, 11] + contact[6, 11] + contact[7, 11] +
+                            contact[8, 11] + contact[9, 11] + contact[10, 11] + contact[11, 11] +
+                            contact[12, 11]) * age_vector[11] +
+                           (contact[5, 12] + contact[6, 12] + contact[7, 12] + contact[8, 12] + contact[9, 12] +
+                            contact[10, 12] + contact[11, 12] + contact[12, 12]) * age_vector[12]) / age_5
 
-                col_5_4 = ((contact[13, 5] + contact[13, 6] + contact[13, 7] + contact[13, 8] + contact[13, 9] +
-                            contact[13, 10] + contact[13, 11] + contact[13, 12]) * age_vector[13] + (contact[14, 5] +
-                                                                                                     contact[14, 6] +
-                                                                                                     contact[14, 7] +
-                                                                                                     contact[14, 8] +
-                                                                                                     contact[14, 9] +
-                                                                                                     contact[14, 10] +
-                                                                                                     contact[14, 11] +
-                                                                                                     contact[14, 12]) *
-                           age_vector[14] +
-                           (contact[15, 5] + contact[15, 6] + contact[15, 7] + contact[15, 8] + contact[15, 9] +
-                            contact[15, 10] + contact[15, 11] + contact[15, 12]) * age_vector[12]) / age_5
+                col_5_4 = ((contact[5, 13] + contact[6, 13] + contact[7, 13] + contact[8, 13] + contact[9, 13] +
+                            contact[10, 13] + contact[11, 13] + contact[12, 13]) * age_vector[13] +
+                           (contact[5, 14] + contact[6, 14] + contact[7, 14] + contact[8, 14] + contact[9, 14] +
+                            contact[10, 14] + contact[11, 14] + contact[12, 14]) * age_vector[14] +
+                           (contact[5, 15] + contact[6, 15] + contact[7, 15] + contact[8, 15] + contact[9, 15] +
+                            contact[10, 15] + contact[11, 15] + contact[12, 15]) * age_vector[15]) / age_5
+
                 # 6th column
                 col_0_5 = (contact[0, 13] * age_vector[13] + contact[0, 14] * age_vector[14] +
                            contact[0, 15] * age_vector[15]) / age_6
-                col_1_5 = ((contact[1, 13] + contact[2, 13]) * age_vector[13] + (contact[1, 14] +
-                                                                                 contact[2, 14]) * age_vector[14] +
+                col_1_5 = ((contact[1, 13] + contact[2, 13]) * age_vector[13] +
+                           (contact[1, 14] + contact[2, 14]) * age_vector[14] +
                            (contact[1, 15] + contact[2, 15]) * age_vector[15]) / age_6
+
                 col_2_5 = (contact[3, 13] * age_vector[13] + contact[3, 14] * age_vector[14] +
                            contact[3, 15] * age_vector[15]) / age_6
+
                 col_3_5 = (contact[4, 13] * age_vector[13] + contact[4, 14] * age_vector[14] +
                            contact[4, 15] * age_vector[15]) / age_6
+
                 col_4_5 = ((contact[5, 13] + contact[6, 13] + contact[7, 13] + contact[8, 13] + contact[9, 13] +
                             contact[10, 13] + contact[11, 13] + contact[12, 13]) * age_vector[13] +
                            (contact[5, 14] + contact[6, 14] + contact[7, 14] + contact[8, 14] + contact[9, 14] +
-                            contact[10, 14] + contact[11, 14] +
-                            contact[12, 14]) * age_vector[14] +
+                            contact[10, 14] + contact[11, 14] + contact[12, 14]) * age_vector[14] +
                            (contact[5, 15] + contact[6, 15] + contact[7, 15] + contact[8, 15] + contact[9, 15] +
                             contact[10, 15] + contact[11, 15] + contact[12, 15]) * age_vector[15]) / age_6
 
@@ -280,5 +275,3 @@ class Contacts:
             # Final shape of the np.nd-arrays: (192, 6)
             self.data_cm_d2pca_column = np.vstack(self.data_cm_d2pca_col)
             self.data_cm_d2pca_row = np.vstack(self.data_cm_d2pca_r)
-
-
