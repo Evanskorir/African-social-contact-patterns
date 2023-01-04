@@ -86,45 +86,45 @@ class Indicators:
                    labels=['PC1', 'PC2', 'PC3', 'PC4'], rotation=0, fontsize=20)
 
         plt.savefig("../plots/" + "components.pdf")
-
-    def project_2d(self):
-        # put feature values into dataframe
-        stand = StandardScaler()
-        scaled = stand.fit_transform(self.data_tr.indicator_data)
-        pca3 = PCA(n_components=2, svd_solver='randomized', random_state=50)
-        pca_dataa = pca3.fit_transform(scaled)
-        components = pd.DataFrame(pca3.components_.T, index=pd.DataFrame(self.data_tr.indicator_data).columns,
-                                  columns=['PCA1', 'PCA2'])
-
-        # plot size
-        plt.figure(figsize=(16, 12))
-
-        # main scatter-plot
-        plt.scatter(pca_dataa[:, 0], pca_dataa[:, 1], cmap='jet', edgecolors='blue',
-                    alpha=0.7, s=50)
-        plt.xlabel('First Dim (34.4%)')
-        plt.ylabel('Second Dim (10.6%)')
-        plt.ylim(10, -10)
-        plt.xlim(10, -10)
-
-        # individual feature values
-        ax2 = plt.twinx().twiny()
-        ax2.set_ylim(-0.4, 0.4)
-        ax2.set_xlim(-0.4, 0.4)
-
-        # reference lines
-        ax2.hlines(0, -0.4, 0.4, linestyles='dotted', colors='black')
-        ax2.vlines(0, -0.4, 0.4, linestyles='dotted', colors='black')
-
-        # offset for labels
-        offset = 1.05
-
-        # arrow & text
-        for a, i in enumerate(components.index):
-            ax2.arrow(0, 0, components['PCA1'][a], -components['PCA2'][a],
-                      alpha=0.5, facecolor='grey', head_width=0.008)
-            ax2.annotate(i, (components['PCA1'][a] * offset, -components['PCA2'][a] * offset), color='black')
-        plt.savefig("../plots/" + "2D projection.pdf")
+    #
+    # def project_2d(self):
+    #     # put feature values into dataframe
+    #     stand = StandardScaler()
+    #     scaled = stand.fit_transform(self.data_tr.indicator_data)
+    #     pca3 = PCA(n_components=2, svd_solver='randomized', random_state=50)
+    #     pca_dataa = pca3.fit_transform(scaled)
+    #     components = pd.DataFrame(pca3.components_.T, index=pd.DataFrame(self.data_tr.indicator_data).columns,
+    #                               columns=['PCA1', 'PCA2'])
+    #
+    #     # plot size
+    #     plt.figure(figsize=(16, 12))
+    #
+    #     # main scatter-plot
+    #     plt.scatter(pca_dataa[:, 0], pca_dataa[:, 1], cmap='jet', edgecolors='blue',
+    #                 alpha=0.7, s=50)
+    #     plt.xlabel('First Dim (34.4%)')
+    #     plt.ylabel('Second Dim (10.6%)')
+    #     plt.ylim(10, -10)
+    #     plt.xlim(10, -10)
+    #
+    #     # individual feature values
+    #     ax2 = plt.twinx().twiny()
+    #     ax2.set_ylim(-0.4, 0.4)
+    #     ax2.set_xlim(-0.4, 0.4)
+    #
+    #     # reference lines
+    #     ax2.hlines(0, -0.4, 0.4, linestyles='dotted', colors='black')
+    #     ax2.vlines(0, -0.4, 0.4, linestyles='dotted', colors='black')
+    #
+    #     # offset for labels
+    #     offset = 1.05
+    #
+    #     # arrow & text
+    #     for a, i in enumerate(components.index):
+    #         ax2.arrow(0, 0, components['PCA1'][a], -components['PCA2'][a],
+    #                   alpha=0.5, facecolor='grey', head_width=0.008)
+    #         ax2.annotate(i, (components['PCA1'][a] * offset, -components['PCA2'][a] * offset), color='black')
+    #     plt.savefig("../plots/" + "2D projection.pdf")
 
     def plot_countries(self):
         # Params

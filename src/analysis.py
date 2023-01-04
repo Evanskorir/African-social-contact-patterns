@@ -75,18 +75,18 @@ def kenya_contacts(data_tr):
 
 
 def country_contacts(data_tr):
-    for country in ["Ethiopia", "Algeria", "Burkina Faso"]:
+    for country in ["Mozambique", "Mauritania", "Egypt"]:
         age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
         matrix_to_plot = data_tr.full_contacts[country]["contact_full"] * data_tr.full_contacts[country]["beta"]
         img = plt.imshow(matrix_to_plot.T,
-                         cmap='jet', vmin=0, vmax=0.9,
+                         cmap='jet', vmin=0, vmax=0.6,
                          alpha=.9, interpolation="nearest")
         ticks = np.arange(0, 6)
 
         plt.yticks(ticks=ticks, labels=age_group, rotation=0)
         plt.xticks(ticks=ticks, labels=age_group, rotation=45)
         plt.gca().invert_yaxis()
-        if country == "Burkina Faso":
+        if country == "Egypt":
             cbar = plt.colorbar(img)
             tick_font_size = 25
             cbar.ax.tick_params(labelsize=tick_font_size)
@@ -95,7 +95,7 @@ def country_contacts(data_tr):
 
 def main():
     do_clustering_pca = False
-    do_clustering_dpca = False
+    do_clustering_dpca = True
 
     # Create data for clustering
     susc = 1.0
@@ -107,7 +107,6 @@ def main():
     ind.pca_apply()
     ind.corr_pcs()
     ind.dendogram_pca()
-    ind.project_2d()
     ind.plot_countries()
 
     kenya_contacts(data_tr=data_tr)
@@ -127,7 +126,7 @@ def main():
     # do analysis of 2dpca
     if do_clustering_dpca:
         Analysis(data_tr=data_tr, pca_data=ind.pca_data, dim_red="2DPCA",
-                 img_prefix="dpca_", threshold=11).run()
+                 img_prefix="dpca_", threshold=8).run()
 
 
 if __name__ == "__main__":
