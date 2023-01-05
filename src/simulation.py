@@ -17,7 +17,7 @@ def get_contact_matrix_from_upper_triu(rvector, number_of_age_groups, age_vector
 
 class Simulation:
 
-    def __init__(self, data, contact_matrix, age_vector, susceptibility, base_r0):
+    def __init__(self, data, contact_matrix, age_vector, susceptibility, base_r0, country):
         # Set parameters
         self.data = data
         self.contact_matrix = contact_matrix
@@ -48,7 +48,7 @@ class Simulation:
                    "r": [0, 0, 0, 0, 0, 0],
                    "c": [0, 0, 0, 0, 0, 0]}
 
-        self.iv.update({"s": self.data.global_unit_set["age"] - self.iv["l1"]})
+        self.iv.update({"s": self.data.age_data[country]["age"] - self.iv["l1"]})
 
         self.t = np.linspace(0, 600, 600)
         self.output = []

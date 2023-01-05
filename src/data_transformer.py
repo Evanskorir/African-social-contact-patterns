@@ -1,6 +1,6 @@
 import numpy as np
-from dataloader import DataLoader
 
+from src.dataloader import DataLoader
 from src.simulation import Simulation
 
 
@@ -37,18 +37,17 @@ class Contacts:
 
             for contact in contacts:
                 age_vector = self.data.age_data[country]["age"].reshape((-1, 1))
-                age_1 = age_vector[0]
-                age_2 = age_vector[1] + age_vector[2]
-                age_3 = age_vector[3]
-                age_4 = age_vector[4]
-                age_5 = age_vector[5] + age_vector[6] + age_vector[7] + age_vector[8] + age_vector[9] +\
-                    age_vector[10] + age_vector[11] + age_vector[12]
-                age_6 = age_vector[13] + age_vector[14] + age_vector[15]
+                age_1 = age_vector[0][0]
+                age_2 = np.sum(age_vector[1:3])
+                age_3 = age_vector[3][0]
+                age_4 = age_vector[4][0]
+                age_5 = np.sum(age_vector[5:13])
+                age_6 = np.sum(age_vector[13:16])
 
                 # create the age group
                 age_group = np.array([age_1, age_2, age_3, age_4, age_5, age_6])
                 self.age_group = age_group.reshape((-1, 1))
-                self.data.global_unit_set["age"] = self.age_group
+                self.data.age_data[country]["age"] = age_group
 
                 # create a variable t_contact
                 t_contact = contact * age_vector
@@ -104,7 +103,8 @@ class Contacts:
                 susceptibility[:4] = self.susc
 
                 simulation = Simulation(data=self.data, base_r0=self.base_r0, contact_matrix=matrix,
-                                        age_vector=age_group, susceptibility=susceptibility)
+                                        age_vector=age_group, susceptibility=susceptibility,
+                                        country=country)
                 # Create dictionary with the needed data
                 self.full_contacts.update(
                     {country: {"beta": simulation.beta,

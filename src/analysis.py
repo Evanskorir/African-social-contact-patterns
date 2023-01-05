@@ -2,10 +2,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.decomposition import PCA
 
-from data_transformer import Contacts
-from d2pca import D2PCA
-from hierarchical import Hierarchical
-from Indicators import Indicators
+from src.data_transformer import Contacts
+from src.d2pca import D2PCA
+from src.hierarchical import Hierarchical
+from src.Indicators import Indicators
 
 
 class Analysis:

@@ -1,10 +1,8 @@
-import copy
 import json
-import os
 
 import numpy as np
-import xlrd
 import pandas as pd
+import xlrd
 
 
 class DataLoader:
@@ -55,8 +53,6 @@ class DataLoader:
         wb.unload_sheet(0)
 
         output = dict()
-        population_global = 0
-        age_distribution_global = None
 
         for row in datalist:
             # Store data for units
@@ -64,24 +60,8 @@ class DataLoader:
             # Assumes that the data file contains age distribution from second column until the end
             value = np.array(row[1:]).astype(int)
             output.update({key: {"pop": np.sum(value), "age": value}})
-            # Store data for the whole country
-            population_global += output[key]["pop"]
-            if age_distribution_global is None:
-                age_distribution_global = copy.deepcopy(output[key]["age"])
-            else:
-                age_distribution_global += output[key]["age"]
 
-        self.global_unit_set = {"pop": population_global, "age": age_distribution_global}
         self.age_data = output
-        if not os.path.isdir('../../sens_data/population'):
-            os.makedirs('../../sens_data/population')
-            for key in self.age_data.keys():
-                to_save = {"N": {
-                    "value": [int(x) for x in self.age_data[key]['age']],
-                    "description": "Population"}
-                }
-                with open('../sens_data/population/model_parameters_' + key + '.json', 'w+') as fp:
-                    json.dump(to_save, fp, indent=4)
 
     def _get_contact_mtx(self):
         """

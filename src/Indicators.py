@@ -1,11 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 import pandas as pd
+import scipy.cluster.hierarchy as sch
+import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-import scipy.cluster.hierarchy as sch
-from data_transformer import Contacts
+
+from src.data_transformer import Contacts
 
 
 class Indicators:

@@ -6,7 +6,7 @@ import pandas as pd
 import scipy.cluster.hierarchy as sch
 from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
 
-from data_transformer import Contacts
+from src.data_transformer import Contacts
 
 
 class Hierarchical:

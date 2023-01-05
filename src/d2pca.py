@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn import preprocessing
 
-from data_transformer import Contacts
+from src.data_transformer import Contacts
 
 
 class D2PCA:
