@@ -17,14 +17,7 @@ class Indicators:
         self.data_tr = data_tr
         self.indicator_data = data_tr.indicator_data
         self.pca_data = np.array([])
-        self.pca2 = []
-
-    def corr_data(self):
-        # Let's check the correlation coefficients to see which variables are highly correlated
-        plt.figure(figsize=(18, 18))
-        country = self.data_tr.indicator_data.iloc[:, 1:]
-        sns.heatmap(country.corr(), cmap="rainbow")
-        plt.savefig("../plots/" + "corr.pdf")
+        self.pca2 = PCA(n_components=4, svd_solver='randomized', random_state=50)
 
     def pca_apply(self):
         # Standardization technique for scaling
@@ -32,6 +25,7 @@ class Indicators:
         country_data_scaled = scaler.fit_transform(self.data_tr.indicator_data)
         pca = PCA(svd_solver='randomized', random_state=50)
         pca.fit(country_data_scaled)
+        self.pca_data = self.pca2.fit_transform(country_data_scaled)
 
         # Variance Ratio bar plot for each PCA components.
         plt.figure(figsize=(10, 6))
@@ -49,15 +43,16 @@ class Indicators:
         plt.ylabel('Cumulative Explained Variance')
         plt.savefig("../plots/" + "exp variance.pdf")
 
-        pca2 = PCA(n_components=4, svd_solver='randomized', random_state=50)
-        pca_data = pca2.fit_transform(country_data_scaled)
-
-        # data projected to 4 dim
-        self.pca_data = pca_data
-        self.pca2 = pca2
         # Let's check the variance ratios
-        print("\n cumulative variance explained by indicators:", np.cumsum(pca2.explained_variance_ratio_))
-        print("\n explained variance explained by indicator:", pca2.explained_variance_ratio_)
+        print("\n cumulative variance explained by indicators:", np.cumsum(self.pca2.explained_variance_ratio_))
+        print("\n explained variance explained by indicator:", self.pca2.explained_variance_ratio_)
+
+    def corr_data(self):
+        # Let's check the correlation coefficients to see which variables are highly correlated
+        plt.figure(figsize=(18, 18))
+        country = self.data_tr.indicator_data.iloc[:, 1:]
+        sns.heatmap(country.corr(), cmap="rainbow")
+        plt.savefig("../plots/" + "corr.pdf")
 
     def dendogram_pca(self):
         # Hierarchical clustering based on only the indicators
@@ -87,51 +82,10 @@ class Indicators:
                    labels=['PC1', 'PC2', 'PC3', 'PC4'], rotation=0, fontsize=20)
 
         plt.savefig("../plots/" + "components.pdf")
-    #
-    # def project_2d(self):
-    #     # put feature values into dataframe
-    #     stand = StandardScaler()
-    #     scaled = stand.fit_transform(self.data_tr.indicator_data)
-    #     pca3 = PCA(n_components=2, svd_solver='randomized', random_state=50)
-    #     pca_dataa = pca3.fit_transform(scaled)
-    #     components = pd.DataFrame(pca3.components_.T, index=pd.DataFrame(self.data_tr.indicator_data).columns,
-    #                               columns=['PCA1', 'PCA2'])
-    #
-    #     # plot size
-    #     plt.figure(figsize=(16, 12))
-    #
-    #     # main scatter-plot
-    #     plt.scatter(pca_dataa[:, 0], pca_dataa[:, 1], cmap='jet', edgecolors='blue',
-    #                 alpha=0.7, s=50)
-    #     plt.xlabel('First Dim (34.4%)')
-    #     plt.ylabel('Second Dim (10.6%)')
-    #     plt.ylim(10, -10)
-    #     plt.xlim(10, -10)
-    #
-    #     # individual feature values
-    #     ax2 = plt.twinx().twiny()
-    #     ax2.set_ylim(-0.4, 0.4)
-    #     ax2.set_xlim(-0.4, 0.4)
-    #
-    #     # reference lines
-    #     ax2.hlines(0, -0.4, 0.4, linestyles='dotted', colors='black')
-    #     ax2.vlines(0, -0.4, 0.4, linestyles='dotted', colors='black')
-    #
-    #     # offset for labels
-    #     offset = 1.05
-    #
-    #     # arrow & text
-    #     for a, i in enumerate(components.index):
-    #         ax2.arrow(0, 0, components['PCA1'][a], -components['PCA2'][a],
-    #                   alpha=0.5, facecolor='grey', head_width=0.008)
-    #         ax2.annotate(i, (components['PCA1'][a] * offset, -components['PCA2'][a] * offset), color='black')
-    #     plt.savefig("../plots/" + "2D projection.pdf")
 
     def plot_countries(self):
         # Params
         n_samples = 32  # number of countries
-        # m_features = 28  # number of economic indicators
-        # selected_names = self.country_names
 
         # Generate
         np.random.seed(42)
@@ -139,7 +93,6 @@ class Indicators:
         labels = [np.random.choice(['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
                                     'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
                                     'Z', '1', '2', '3', '4', '5', '6']) for _ in range(n_samples)]
-        # features = np.random.random((n_samples, m_features))
 
         # Label to color dict (manual)
         label_color_dict = {'A': 'red', 'B': 'peru', 'C': 'blue', 'D': 'magenta',
