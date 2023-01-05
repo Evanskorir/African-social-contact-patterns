@@ -5,7 +5,7 @@ from sklearn.decomposition import PCA
 from src.data_transformer import Contacts
 from src.d2pca import D2PCA
 from src.hierarchical import Hierarchical
-from src.Indicators import Indicators
+from src.indicators import Indicators
 
 
 class Analysis:
