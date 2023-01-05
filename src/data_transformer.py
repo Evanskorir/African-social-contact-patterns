@@ -109,21 +109,21 @@ class Contacts:
                 susceptibility = np.array([1.0] * 6)
                 susceptibility[:4] = self.susc
 
-                simulation = Simulation(data=self.data, base_r0=self.base_r0, contact_matrix=c,
+                simulation = Simulation(data=self.data, base_r0=self.base_r0, contact_matrix=matrix,
                                         age_vector=age_group, susceptibility=susceptibility)
                 # Create dictionary with the needed data
                 self.full_contacts.update(
                     {country: {"beta": simulation.beta,
                                "age_vector": self.age_group,
-                               "contact_full": c
+                               "contact_full": matrix
                                }
                      })
 
                 # Create separated data structure for (2D)^2 PCA
                 self.data_cm_d2pca_col.append(
-                    simulation.beta * c)
+                    simulation.beta * matrix)
                 self.data_cm_d2pca_r.append(
-                    simulation.beta * c
+                    simulation.beta * matrix
                 )
 
                 # create data for the indicators
