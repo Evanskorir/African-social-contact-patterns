@@ -56,55 +56,49 @@ class Contacts:
                 # create a matrix c and fill it
                 # the matrix is symmetrical
                 c = np.zeros(shape=(6, 6))
-                c[0, 0] = contact[0, 0]
+                c[0, 0] = t_contact[0, 0]
                 c[1, 0] = np.sum(t_contact[1:3, 0])
-                c[2, 0] = contact[3, 0]
-                c[3, 0] = contact[4, 0]
+                c[2, 0] = t_contact[3, 0]
+                c[3, 0] = t_contact[4, 0]
                 c[4, 0] = np.sum(t_contact[5:13, 0])
                 c[5, 0] = np.sum(t_contact[13:16, 0])
-                c[0, 1] = c[1, 0]
+                c[0, 1] = np.copy(c[1, 0])
+                c[0, 2] = np.copy(c[2, 0])
+                c[0, 3] = np.copy(c[3, 0])
+                c[0, 4] = np.copy(c[4, 0])
+                c[0, 5] = np.copy(c[5, 0])
+
                 c[1, 1] = np.sum(t_contact[1:3, 1:3])
                 c[2, 1] = np.sum(t_contact[3, 1:3])
                 c[3, 1] = np.sum(t_contact[4, 1:3])
                 c[4, 1] = np.sum(t_contact[5:13, 1:3])
                 c[5, 1] = np.sum(t_contact[13:16, 1:3])
-                c[0, 2] = c[2, 0]
-                c[1, 2] = c[2, 1]
-                c[2, 2] = contact[3, 3]
-                c[3, 2] = contact[4, 3]
+                c[1, 2] = np.copy(c[2, 1])
+                c[1, 3] = np.copy(c[3, 1])
+                c[1, 4] = np.copy(c[4, 1])
+                c[1, 5] = np.copy(c[5, 1])
+
+                c[2, 2] = t_contact[3, 3]
+                c[3, 2] = t_contact[4, 3]
                 c[4, 2] = np.sum(t_contact[5:13, 3])
                 c[5, 2] = np.sum(t_contact[13:16, 3])
-                c[0, 3] = c[3, 0]
-                c[1, 3] = c[3, 1]
-                c[2, 3] = c[3, 2]
-                c[3, 3] = contact[4, 4]
+                c[2, 3] = np.copy(c[3, 2])
+                c[2, 4] = np.copy(c[4, 2])
+                c[2, 5] = np.copy(c[5, 2])
+
+                c[3, 3] = t_contact[4, 4]
                 c[4, 3] = np.sum(t_contact[5:13, 4])
                 c[5, 3] = np.sum(t_contact[13:16, 4])
-                c[0, 4] = c[4, 0]
-                c[1, 4] = c[4, 1]
-                c[2, 4] = c[4, 2]
-                c[3, 4] = c[4, 3]
+                c[3, 4] = np.copy(c[4, 3])
+                c[3, 5] = np.copy(c[5, 3])
+
                 c[4, 4] = np.sum(t_contact[5:13, 5:13])
-                c[5, 4] = np.sum(t_contact[5:13, 13:16])
-                c[0, 5] = c[5, 0]
-                c[1, 5] = c[5, 1]
-                c[2, 5] = c[5, 2]
-                c[3, 5] = c[5, 3]
-                c[4, 5] = c[5, 4]
+                c[5, 4] = np.sum(t_contact[13:16, 5:13])
+                c[4, 5] = np.copy(c[5, 4])
+
                 c[5, 5] = np.sum(t_contact[13:16, 13:16])
 
-                matrix = c/self.age_group
-
-                # retain the unaffected contacts
-                matrix[0, 0] = contact[0, 0]
-                matrix[2, 0] = contact[3, 0]
-                matrix[3, 0] = contact[4, 0]
-                matrix[0, 2] = contact[0, 3]
-                matrix[2, 2] = contact[3, 3]
-                matrix[3, 2] = contact[4, 3]
-                matrix[0, 3] = contact[0, 4]
-                matrix[2, 3] = contact[3, 4]
-                matrix[3, 3] = contact[4, 4]
+                matrix = c / self.age_group
 
                 susceptibility = np.array([1.0] * 6)
                 susceptibility[:4] = self.susc
@@ -137,6 +131,3 @@ class Contacts:
             # Final shape of the np.nd-arrays: (192, 6)
             self.data_cm_d2pca_column = np.vstack(self.data_cm_d2pca_col)
             self.data_cm_d2pca_row = np.vstack(self.data_cm_d2pca_r)
-
-
-
