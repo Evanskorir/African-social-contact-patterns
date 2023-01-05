@@ -58,7 +58,7 @@ def kenya_contacts(data_tr):
     age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
 
     plt.figure(figsize=(10, 8))
-    full = plt.imshow(data_tr.full_contacts['Kenya']['contact_full'].T,
+    full = plt.imshow(data_tr.full_contacts['Kenya']['contact_full'],
                       cmap='jet', alpha=.9, interpolation="nearest")
     ticks = np.arange(0, 6)
     cbar = plt.colorbar(full)
@@ -77,7 +77,7 @@ def kenya_contacts(data_tr):
 def country_contacts(data_tr):
     for country in ["Mozambique", "Mauritania", "Egypt"]:
         age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
-        matrix_to_plot = data_tr.full_contacts[country]["contact_full"] * data_tr.full_contacts[country]["beta"]
+        matrix_to_plot = data_tr.full_contacts[country]["contact_full"].T * data_tr.full_contacts[country]["beta"]
         img = plt.imshow(matrix_to_plot.T,
                          cmap='jet', vmin=0, vmax=0.6,
                          alpha=.9, interpolation="nearest")
@@ -95,7 +95,7 @@ def country_contacts(data_tr):
 
 def main():
     do_clustering_pca = False
-    do_clustering_dpca = True
+    do_clustering_dpca = False
 
     # Create data for clustering
     susc = 1.0
@@ -104,12 +104,12 @@ def main():
 
     # execute class indicators
     ind = Indicators(data_tr=data_tr, country_names=data_tr.country_names)
-    ind.pca_apply()
-    ind.corr_pcs()
-    ind.dendogram_pca()
-    ind.plot_countries()
+    # ind.pca_apply()
+    # ind.corr_pcs()
+    # ind.dendogram_pca()
+    # ind.plot_countries()
 
-    kenya_contacts(data_tr=data_tr)
+    # kenya_contacts(data_tr=data_tr)
     country_contacts(data_tr=data_tr)
 
     # do analysis for original data
