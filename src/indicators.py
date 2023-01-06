@@ -66,17 +66,14 @@ class Indicators:
         plt.savefig("../plots/" + "Dendrogram.pdf")
 
     def corr_pcs(self):
-        a = pd.DataFrame(self.data_tr.indicator_data)
-        b = a.columns
-        print(b)
         plt.figure(figsize=(14, 12))
         ax = plt.gca()
         ax = plt.imshow(self.pca2.components_, cmap='jet',
                         alpha=.9, interpolation="nearest")
-        feature_names = list(b)
+        feature_names = list(pd.DataFrame(self.data_tr.indicator_data).columns)
         plt.colorbar(ax, orientation='horizontal', ticks=[self.pca2.components_.min(), 0,
                                                           self.pca2.components_.max()], pad=0.6)
-        plt.xticks(ticks=np.arange(len(b)), labels=feature_names,
+        plt.xticks(ticks=np.arange(len(pd.DataFrame(self.data_tr.indicator_data).columns)), labels=feature_names,
                    rotation=90, fontsize=20)
         plt.yticks(ticks=np.arange(0, 4),
                    labels=['PC1', 'PC2', 'PC3', 'PC4'], rotation=0, fontsize=20)
@@ -128,5 +125,4 @@ class Indicators:
         # Add the axis labels
         plt.xlabel('First Dim (34.4%)')
         plt.ylabel('Second Dim (10.6%)')
-
         plt.savefig("../plots/" + "countries projection.pdf")

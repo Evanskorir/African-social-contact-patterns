@@ -54,9 +54,7 @@ class Analysis:
 
 
 def kenya_contacts(data_tr):
-    # full contact
     age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
-
     plt.figure(figsize=(10, 8))
     full = plt.imshow(data_tr.full_contacts['Kenya']['contact_full'],
                       cmap='jet', alpha=.9, interpolation="nearest")
@@ -64,10 +62,8 @@ def kenya_contacts(data_tr):
     cbar = plt.colorbar(full)
     tick_font_size = 20
     cbar.ax.tick_params(labelsize=tick_font_size)
-
     plt.xticks(ticks=ticks, labels=age_group, rotation=45)
     plt.yticks(ticks=ticks, labels=age_group, rotation=0)
-    # plt.title("All", fontsize=15)
     plt.gca().invert_yaxis()
     plt.xlabel("Age")
     plt.ylabel("Age")
@@ -75,18 +71,17 @@ def kenya_contacts(data_tr):
 
 
 def country_contacts(data_tr):
-    for country in ["Mozambique", "Mauritania", "Egypt"]:
+    for country in ["Mauritius", "Senegal", "Rwanda"]:
         age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
         matrix_to_plot = data_tr.full_contacts[country]["contact_full"].T * data_tr.full_contacts[country]["beta"]
         img = plt.imshow(matrix_to_plot.T,
                          cmap='jet', vmin=0, vmax=0.6,
                          alpha=.9, interpolation="nearest")
         ticks = np.arange(0, 6)
-
         plt.yticks(ticks=ticks, labels=age_group, rotation=0)
         plt.xticks(ticks=ticks, labels=age_group, rotation=45)
         plt.gca().invert_yaxis()
-        if country == "Egypt":
+        if country == "Rwanda":
             cbar = plt.colorbar(img)
             tick_font_size = 25
             cbar.ax.tick_params(labelsize=tick_font_size)
@@ -105,23 +100,23 @@ def main():
     # execute class indicators
     ind = Indicators(data_tr=data_tr, country_names=data_tr.country_names)
     ind.pca_apply()
-    # ind.corr_pcs()
-    # ind.dendogram_pca()
-    # ind.plot_countries()
+    ind.corr_pcs()
+    ind.dendogram_pca()
+    ind.plot_countries()
 
-    # kenya_contacts(data_tr=data_tr)
-    # country_contacts(data_tr=data_tr)
+    kenya_contacts(data_tr=data_tr)
+    country_contacts(data_tr=data_tr)
 
     # do analysis for original data
     Analysis(data_tr=data_tr, pca_data=ind.pca_data,
-             img_prefix="original", threshold=0.55).run()
+             img_prefix="original", threshold=0.5).run()
 
     # Do analysis of the pca
     if do_clustering_pca:
         n_components = 4
         # do analysis for reduced data
         Analysis(data_tr=data_tr, dim_red="PCA", n_components=4, pca_data=ind.pca_data,
-                 img_prefix="pca_" + str(n_components), threshold=11).run()
+                 img_prefix="pca_" + str(n_components), threshold=8).run()
 
     # do analysis of 2dpca
     if do_clustering_dpca:

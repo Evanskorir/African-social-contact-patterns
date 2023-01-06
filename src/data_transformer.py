@@ -34,7 +34,6 @@ class Contacts:
                         self.data.contact_data[country]["SCHOOL"] +
                         self.data.contact_data[country]["WORK"] +
                         self.data.contact_data[country]["OTHER"]]
-
             for contact in contacts:
                 age_vector = self.data.age_data[country]["age"].reshape((-1, 1))
                 age_1 = age_vector[0][0]
@@ -125,9 +124,13 @@ class Contacts:
 
                 # Create separated data structure for 1D PCA
                 self.data_cm_1dpca.append(
-                    simulation.beta * c[self.upper_tri_indexes])
+                    simulation.beta * matrix[self.upper_tri_indexes])
             self.data_clustering = np.array(self.data_cm_1dpca)
 
             # Final shape of the np.nd-arrays: (192, 6)
             self.data_cm_d2pca_column = np.vstack(self.data_cm_d2pca_col)
             self.data_cm_d2pca_row = np.vstack(self.data_cm_d2pca_r)
+
+
+
+
