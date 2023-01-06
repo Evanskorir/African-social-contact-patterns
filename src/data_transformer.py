@@ -130,3 +130,7 @@ class Contacts:
             # Final shape of the np.nd-arrays: (192, 6)
             self.data_cm_d2pca_column = np.vstack(self.data_cm_d2pca_col)
             self.data_cm_d2pca_row = np.vstack(self.data_cm_d2pca_r)
+
+
+
+
