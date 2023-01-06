@@ -67,7 +67,7 @@ class Indicators:
 
     def corr_pcs(self):
         plt.figure(figsize=(14, 12))
-        ax = plt.gca()
+        _ = plt.gca()
         ax = plt.imshow(self.pca2.components_, cmap='jet',
                         alpha=.9, interpolation="nearest")
         feature_names = list(pd.DataFrame(self.data_tr.indicator_data).columns)

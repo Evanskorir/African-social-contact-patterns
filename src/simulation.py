@@ -32,6 +32,7 @@ class Simulation:
         self.params.update({"beta": self.beta})
 
         # Initial values for model
+        self.iv: dict
         self.iv = {"l1": [0, 0, 0, 1, 0, 0],
                    "l2": [0, 0, 0, 0, 0, 0],
                    "ip": [0, 0, 0, 0, 0, 0],
