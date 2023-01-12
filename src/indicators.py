@@ -28,10 +28,10 @@ class Indicators:
         self.pca_data = self.pca2.fit_transform(country_data_scaled)
 
         # Variance Ratio bar plot for each PCA components.
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(10, 8))
         plt.bar(range(1, len(pca.explained_variance_ratio_) + 1), pca.explained_variance_ratio_)
-        plt.xlabel("PCA Components", fontweight='bold')
-        plt.ylabel("Variance Ratio", fontweight='bold')
+        plt.xlabel("PCA Components", fontweight='bold', fontsize=18)
+        plt.ylabel("Variance Ratio", fontweight='bold', fontsize=18)
         plt.savefig("../plots/" + "variance.pdf")
 
         # Scree plot to visualize the Cumulative variance against the Number of components
@@ -105,7 +105,7 @@ class Indicators:
         col = [label_color_dict[label] for label in labels]
 
         # Create the scatter plot
-        plt.figure(figsize=(14, 12))
+        plt.figure(figsize=(14, 14))
         plt.scatter(self.pca_data[:, 0], self.pca_data[:, 1],
                     c=col, alpha=0.5)
 
@@ -116,13 +116,13 @@ class Indicators:
 
             # Add the text label
             labelpad = 0.03  # Adjust this based on your dataset
-            plt.text(self.pca_data[i, 0] + labelpad, self.pca_data[i, 1] + labelpad, name, fontsize=9)
+            plt.text(self.pca_data[i, 0] + labelpad, self.pca_data[i, 1] + labelpad, name, fontsize=20)
 
             # Mark the labeled observations with a star marker
             plt.scatter(self.pca_data[i, 0], self.pca_data[i, 1],
-                        c=col[i], vmin=min(col), vmax=max(col), marker='*', s=100)
+                        c=col[i], vmin=min(col), vmax=max(col), marker='*', s=120)
 
         # Add the axis labels
-        plt.xlabel('First Dim (34.4%)')
-        plt.ylabel('Second Dim (10.6%)')
+        plt.xlabel('First Dim (34.4%)', fontsize=20)
+        plt.ylabel('Second Dim (10.6%)', fontsize=20)
         plt.savefig("../plots/" + "countries projection.pdf")

@@ -26,7 +26,58 @@ class Contacts:
 
         self.indicator_data = []
         self.data_cm_1dpca = []
+
+        self.get_model_params()
         self.get_contacts()
+
+    def get_model_params(self):
+        for country in self.country_names:
+            age_vector = self.data.age_data[country]["age"].reshape((-1, 1))
+
+            # get the Probability of asymptomatic course for the age groups
+            p1 = np.sum(age_vector[1:3, 0] * self.data.model_parameters_data['p'][1:3]) / np.sum(age_vector[1:3])
+            p2 = np.sum(age_vector[5:13, 0] * self.data.model_parameters_data['p'][5:13]) / np.sum(age_vector[5:13])
+            p3 = np.sum(age_vector[13:16, 0] * [0.4, 0.3, 0.2]) / np.sum(age_vector[13:16])
+
+            # get the Probability of intensive care (given hospitalization) for the age groups
+            x1 = np.sum(age_vector[1:3, 0] * self.data.model_parameters_data['xi'][1:3]) / np.sum(age_vector[1:3])
+            x2 = np.sum(age_vector[5:13, 0] * self.data.model_parameters_data['xi'][5:13]) / np.sum(
+                age_vector[5:13])
+            x3 = np.sum(age_vector[13:16, 0] * [0.292903, 0.293624, 0.2936]) / np.sum(age_vector[13:16])
+
+            # get the Probability of fatal outcome
+            m1 = np.sum(age_vector[1:3, 0] * self.data.model_parameters_data['mu'][1:3]) / np.sum(age_vector[1:3])
+            m2 = np.sum(age_vector[5:13, 0] * self.data.model_parameters_data['mu'][5:13]) / np.sum(
+                age_vector[5:13])
+            m3 = np.sum(age_vector[13:16, 0] * [0.582, 0.678, 0.687]) / np.sum(age_vector[13:16])
+
+            # get the "Probability of hospitalization (or intensive care)"
+            h1 = np.sum(age_vector[1:3, 0] * self.data.model_parameters_data['h'][1:3]) / np.sum(age_vector[1:3])
+            h2 = np.sum(age_vector[5:13, 0] * self.data.model_parameters_data['h'][5:13]) / np.sum(age_vector[5:13])
+            h3 = np.sum(age_vector[13:16, 0] * [7.750e-02, 1.788e-01, 3.297e-01]) / np.sum(age_vector[13:16])
+
+            # update the parameters
+            self.data.model_parameters_data.update(
+                {'p': [self.data.model_parameters_data['p'][0], p1,
+                       self.data.model_parameters_data['p'][3],
+                       self.data.model_parameters_data['p'][4], p2, p3],
+                 'xi': [self.data.model_parameters_data['xi'][0], x1,
+                        self.data.model_parameters_data['xi'][3],
+                        self.data.model_parameters_data['xi'][4], x2, x3],
+                 'h': [self.data.model_parameters_data['h'][0], h1,
+                       self.data.model_parameters_data['h'][3],
+                       self.data.model_parameters_data['h'][4], h2, h3],
+                 'mu': [self.data.model_parameters_data['mu'][0], m1,
+                        self.data.model_parameters_data['mu'][3],
+                        self.data.model_parameters_data['mu'][4], m2, m3]
+                 })
+
+            # convert the Probabilities to a numpy array
+            self.data.model_parameters_data['p'] = np.array(self.data.model_parameters_data['p'])
+            self.data.model_parameters_data['xi'] = np.array(self.data.model_parameters_data['xi'])
+            self.data.model_parameters_data['mu'] = np.array(self.data.model_parameters_data['mu'])
+            self.data.model_parameters_data['h'] = np.array(self.data.model_parameters_data['h'])
+            self.data.model_parameters_data.update(self.data.model_parameters_data)
 
     def get_contacts(self):
         for country in self.country_names:
@@ -130,7 +181,6 @@ class Contacts:
             # Final shape of the np.nd-arrays: (192, 6)
             self.data_cm_d2pca_column = np.vstack(self.data_cm_d2pca_col)
             self.data_cm_d2pca_row = np.vstack(self.data_cm_d2pca_r)
-
 
 
 

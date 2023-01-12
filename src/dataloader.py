@@ -20,7 +20,8 @@ class DataLoader:
         self._age_data_file = "../data/Pop.xls"
         self.contact_types = np.array(["HOME", "SCHOOL", "WORK", "OTHER"])
         self._contact_data_file = ["../data/contact_" + c_type + ".xls" for c_type in self.contact_types]
-        self._model_parameters_data_file = "../data/model_parameters.json"
+        self._model_parameters_data_file = "../data/model_parameters.json"  # 16 params
+        # self._model_parameters_data_file = "../data/all_model_parameters.json"  # 6 params
         self._indicators_file = "../data/Indicators.xls"
         # Get values for data members
         self._get_data()
@@ -127,3 +128,4 @@ class DataLoader:
         matrix_1 = matrix * age_distribution
         output = (matrix_1 + matrix_1.T) / (2 * age_distribution)  # we symmetrize the matrix by the formula
         return output
+

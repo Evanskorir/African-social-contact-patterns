@@ -55,34 +55,35 @@ class Analysis:
 
 def kenya_contacts(data_tr):
     age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
-    plt.figure(figsize=(10, 8))
+    plt.figure(figsize=(13, 12))
     full = plt.imshow(data_tr.full_contacts['Kenya']['contact_full'],
-                      cmap='jet', alpha=.9, interpolation="nearest")
+                      cmap='jet', alpha=.9, interpolation="nearest", vmin=0, vmax=16)
     ticks = np.arange(0, 6)
-    cbar = plt.colorbar(full)
-    tick_font_size = 20
+    cbar = plt.colorbar(full, shrink=0.5)
+    tick_font_size = 24
     cbar.ax.tick_params(labelsize=tick_font_size)
-    plt.xticks(ticks=ticks, labels=age_group, rotation=45)
-    plt.yticks(ticks=ticks, labels=age_group, rotation=0)
+    plt.xticks(ticks=ticks, labels=age_group, rotation=45, fontsize=28)
+    plt.yticks(ticks=ticks, labels=age_group, rotation=0, fontsize=28)
     plt.gca().invert_yaxis()
-    plt.xlabel("Age")
-    plt.ylabel("Age")
+    plt.xlabel("Age", fontsize=28)
+    plt.ylabel("Age", fontsize=28)
     plt.savefig("../plots/" + "All.pdf")
 
 
 def country_contacts(data_tr):
-    for country in ["Mauritius", "Senegal", "Rwanda"]:
+    plt.figure(figsize=(12, 10))
+    for country in ["Mauritania", "Congo", "Niger"]:
         age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
         matrix_to_plot = data_tr.full_contacts[country]["contact_full"].T * data_tr.full_contacts[country]["beta"]
         img = plt.imshow(matrix_to_plot.T,
                          cmap='jet', vmin=0, vmax=0.6,
                          alpha=.9, interpolation="nearest")
         ticks = np.arange(0, 6)
-        plt.yticks(ticks=ticks, labels=age_group, rotation=0)
-        plt.xticks(ticks=ticks, labels=age_group, rotation=45)
+        plt.yticks(ticks=ticks, labels=age_group, rotation=0, fontsize=28)
+        plt.xticks(ticks=ticks, labels=age_group, rotation=45, fontsize=28)
         plt.gca().invert_yaxis()
-        if country == "Rwanda":
-            cbar = plt.colorbar(img)
+        if country == "Niger":
+            cbar = plt.colorbar(img, shrink=0.6)
             tick_font_size = 25
             cbar.ax.tick_params(labelsize=tick_font_size)
         plt.savefig("../plots/" + country + ".pdf")
@@ -100,9 +101,9 @@ def main():
     # execute class indicators
     ind = Indicators(data_tr=data_tr, country_names=data_tr.country_names)
     ind.pca_apply()
-    ind.corr_pcs()
-    ind.dendogram_pca()
-    ind.plot_countries()
+    #ind.corr_pcs()
+    #ind.dendogram_pca()
+    #ind.plot_countries()
 
     kenya_contacts(data_tr=data_tr)
     country_contacts(data_tr=data_tr)
