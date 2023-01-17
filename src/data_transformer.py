@@ -32,48 +32,36 @@ class Contacts:
         self.get_contacts()
 
     def get_model_params(self):
-        # load the data using pandas for easy manipulation
-        age_distribution2 = pd.read_excel("../data/Pop.xls")
+        # load the data using pandas for easy manipulation of all the countries
+        age_pop = pd.read_excel("../data/Pop.xls")
 
         # drop the first column since it contains the name of the countries
-        age_distribution3 = age_distribution2.iloc[:, 1:]
+        age_pop_2 = age_pop.iloc[:, 1:]
 
         # get the age groups population sum for the all countries
-        age_1 = np.sum(age_distribution3.iloc[:, 1:3])
-        age_2 = np.sum(age_distribution3.iloc[:, 5:13])
-        age_3 = np.sum(age_distribution3.iloc[:, 13:16])
+        pop_1 = np.sum(age_pop_2.iloc[:, 1:3])
+        pop_2 = np.sum(age_pop_2.iloc[:, 5:13])
+        pop_3 = np.sum(age_pop_2.iloc[:, 13:16])
 
         # get the Probability of asymptomatic course for the age groups
-        p_1 = np.sum(np.sum(age_distribution3.iloc[:, 1:3] * self.data.model_parameters_data['p'][1:3]) /
-                     np.sum(age_1))
-        p_2 = np.sum(np.sum(age_distribution3.iloc[:, 5:13] * self.data.model_parameters_data['p'][5:13]) /
-                     np.sum(age_2))
-        p_3 = np.sum(np.sum((age_distribution3.iloc[:, 13:16] * self.data.model_parameters_data['p'][13:16])) /
-                     np.sum(age_3))
+        p_1 = np.sum(np.sum(age_pop_2.iloc[:, 1:3]) * self.data.model_parameters_data['p'][1:3]) / np.sum(pop_1)
+        p_2 = np.sum(np.sum(age_pop_2.iloc[:, 5:13]) * self.data.model_parameters_data['p'][5:13]) / np.sum(pop_2)
+        p_3 = np.sum(np.sum(age_pop_2.iloc[:, 13:16]) * self.data.model_parameters_data['p'][13:16]) / np.sum(pop_3)
 
         # get the Probability of intensive care (given hospitalization) for the age groups
-        x_1 = np.sum(np.sum(age_distribution3.iloc[:, 1:3] * self.data.model_parameters_data['xi'][1:3]) /
-                     np.sum(age_1))
-        x_2 = np.sum(np.sum(age_distribution3.iloc[:, 5:13] * self.data.model_parameters_data['xi'][5:13]) /
-                     np.sum(age_2))
-        x_3 = np.sum(np.sum((age_distribution3.iloc[:, 13:16] * self.data.model_parameters_data['xi'][13:16])) /
-                     np.sum(age_3))
+        x_1 = np.sum(np.sum(age_pop_2.iloc[:, 1:3]) * self.data.model_parameters_data['xi'][1:3]) / np.sum(pop_1)
+        x_2 = np.sum(np.sum(age_pop_2.iloc[:, 5:13]) * self.data.model_parameters_data['xi'][5:13]) / np.sum(pop_2)
+        x_3 = np.sum(np.sum(age_pop_2.iloc[:, 13:16]) * self.data.model_parameters_data['xi'][13:16]) / np.sum(pop_3)
 
         # get the Probability of fatal outcome
-        m_1 = np.sum(np.sum(age_distribution3.iloc[:, 1:3] * self.data.model_parameters_data['mu'][1:3]) /
-                     np.sum(age_1))
-        m_2 = np.sum(np.sum(age_distribution3.iloc[:, 5:13] * self.data.model_parameters_data['mu'][5:13]) /
-                     np.sum(age_2))
-        m_3 = np.sum(np.sum((age_distribution3.iloc[:, 13:16] * self.data.model_parameters_data['mu'][13:16])) /
-                     np.sum(age_3))
+        m_1 = np.sum(np.sum(age_pop_2.iloc[:, 1:3]) * self.data.model_parameters_data['mu'][1:3]) / np.sum(pop_1)
+        m_2 = np.sum(np.sum(age_pop_2.iloc[:, 5:13]) * self.data.model_parameters_data['mu'][5:13]) / np.sum(pop_2)
+        m_3 = np.sum(np.sum(age_pop_2.iloc[:, 13:16]) * self.data.model_parameters_data['mu'][13:16]) / np.sum(pop_3)
 
         # get the "Probability of hospitalization (or intensive care)"
-        h_1 = np.sum(np.sum(age_distribution3.iloc[:, 1:3] * self.data.model_parameters_data['h'][1:3]) /
-                     np.sum(age_1))
-        h_2 = np.sum(np.sum(age_distribution3.iloc[:, 5:13] * self.data.model_parameters_data['h'][5:13]) /
-                     np.sum(age_2))
-        h_3 = np.sum(np.sum((age_distribution3.iloc[:, 13:16] * self.data.model_parameters_data['h'][13:16])) /
-                     np.sum(age_3))
+        h_1 = np.sum(np.sum(age_pop_2.iloc[:, 1:3]) * self.data.model_parameters_data['h'][1:3]) / np.sum(pop_1)
+        h_2 = np.sum(np.sum(age_pop_2.iloc[:, 5:13]) * self.data.model_parameters_data['h'][5:13]) / np.sum(pop_2)
+        h_3 = np.sum(np.sum(age_pop_2.iloc[:, 13:16]) * self.data.model_parameters_data['h'][13:16]) / np.sum(pop_3)
 
         # update the parameters
         self.data.model_parameters_data.update(
@@ -90,7 +78,7 @@ class Contacts:
                     self.data.model_parameters_data['mu'][3],
                     self.data.model_parameters_data['mu'][4], m_2, m_3]
              })
-        # convert the Probabilities to a numpy array
+        # convert the Probabilities to a numpy array in their desired format
         self.data.model_parameters_data['p'] = np.array(self.data.model_parameters_data['p'])
         self.data.model_parameters_data['xi'] = np.array(self.data.model_parameters_data['xi'])
         self.data.model_parameters_data['mu'] = np.array(self.data.model_parameters_data['mu'])
