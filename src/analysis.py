@@ -100,7 +100,7 @@ def main():
 
     # execute class indicators
     ind = Indicators(data_tr=data_tr, country_names=data_tr.country_names)
-    # ind.pca_apply()
+    ind.pca_apply()
     # ind.corr_pcs()
     # ind.dendogram_pca()
     # ind.plot_countries()
@@ -109,8 +109,8 @@ def main():
     # country_contacts(data_tr=data_tr)
 
     # do analysis for original data
-    # Analysis(data_tr=data_tr, pca_data=ind.pca_data,
-    #          img_prefix="original", threshold=0.5).run()
+    #Analysis(data_tr=data_tr, pca_data=ind.pca_data,
+            # img_prefix="original", threshold=0.5).run()
 
     # Do analysis of the pca
     if do_clustering_pca:
