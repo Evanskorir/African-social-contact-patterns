@@ -67,7 +67,7 @@ def kenya_contacts(data_tr):
     plt.gca().invert_yaxis()
     plt.xlabel("Age", fontsize=28)
     plt.ylabel("Age", fontsize=28)
-    plt.savefig("../plots/" + "school.pdf")
+    plt.savefig("../plots/" + "All.pdf")
 
 
 def country_contacts(data_tr):
@@ -91,7 +91,7 @@ def country_contacts(data_tr):
 
 def main():
     do_clustering_pca = False
-    do_clustering_dpca = False
+    do_clustering_dpca = True
 
     # Create data for clustering
     susc = 1.0
@@ -122,7 +122,7 @@ def main():
     # do analysis of 2dpca
     if do_clustering_dpca:
         Analysis(data_tr=data_tr, pca_data=ind.pca_data, dim_red="2DPCA",
-                 img_prefix="dpca_", threshold=8).run()
+                 img_prefix="dpca_", threshold=11).run()
 
 
 if __name__ == "__main__":
