@@ -67,22 +67,23 @@ def kenya_contacts(data_tr):
     plt.gca().invert_yaxis()
     plt.xlabel("Age", fontsize=28)
     plt.ylabel("Age", fontsize=28)
-    plt.savefig("../plots/" + "All.pdf")
+    plt.savefig("../plots/" + "All.pdf")  # here you create plots for contacts at home, school, work, other, and all
+    # by manipulating contact in data_transformer.py
 
 
 def country_contacts(data_tr):
     plt.figure(figsize=(12, 10))
-    for country in ["Mauritania", "Congo", "Niger"]:
+    for country in ["Zimbabwe", "Mauritania", "Sierra Leone"]:
         age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
         matrix_to_plot = data_tr.full_contacts[country]["contact_full"].T * data_tr.full_contacts[country]["beta"]
         img = plt.imshow(matrix_to_plot.T,
-                         cmap='jet', vmin=0, vmax=0.6,
+                         cmap='jet', vmin=0, vmax=0.7,
                          alpha=.9, interpolation="nearest")
         ticks = np.arange(0, 6)
         plt.yticks(ticks=ticks, labels=age_group, rotation=0, fontsize=28)
         plt.xticks(ticks=ticks, labels=age_group, rotation=45, fontsize=28)
         plt.gca().invert_yaxis()
-        if country == "Niger":
+        if country == "Sierra Leone":
             cbar = plt.colorbar(img, shrink=0.6)
             tick_font_size = 25
             cbar.ax.tick_params(labelsize=tick_font_size)
@@ -91,7 +92,7 @@ def country_contacts(data_tr):
 
 def main():
     do_clustering_pca = False
-    do_clustering_dpca = True
+    do_clustering_dpca = False
 
     # Create data for clustering
     susc = 1.0
@@ -106,11 +107,11 @@ def main():
     # ind.plot_countries()
 
     # kenya_contacts(data_tr=data_tr)
-    # country_contacts(data_tr=data_tr)
+    country_contacts(data_tr=data_tr)
 
     # do analysis for original data
-    Analysis(data_tr=data_tr, pca_data=ind.pca_data,
-             img_prefix="original", threshold=0.5).run()
+    #Analysis(data_tr=data_tr, pca_data=ind.pca_data,
+            # img_prefix="original", threshold=0.5).run()
 
     # Do analysis of the pca
     if do_clustering_pca:
@@ -122,7 +123,7 @@ def main():
     # do analysis of 2dpca
     if do_clustering_dpca:
         Analysis(data_tr=data_tr, pca_data=ind.pca_data, dim_red="2DPCA",
-                 img_prefix="dpca_", threshold=11).run()
+                 img_prefix="dpca_", threshold=8).run()
 
 
 if __name__ == "__main__":

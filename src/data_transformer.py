@@ -32,9 +32,9 @@ class Contacts:
     def get_contacts(self):
         age = [(0, 0), (1, 2), (3, 3), (4, 4), (5, 12), (13, 15)]
 
-        age_vector = self.data.age_data["Hungary"]["age"].flatten()
+        age_vector = [self.data.age_data[country]["age"].flatten() for country in self.country_names]
 
-        # params aggregation
+        # procedure to aggregate params to the desired 6 * 6 age group from 16 * 16
         p, x, m, h = (np.zeros(len(age)), np.zeros(len(age)), np.zeros(len(age)), np.zeros(len(age)))
         for i in range(len(age)):
             ps = self.data.model_parameters_data
@@ -48,34 +48,37 @@ class Contacts:
         susceptibility = np.array([1.0] * 6)
         susceptibility[:3] = self.susc
 
-        self.country_names = self.country_names[:-1]
         for country in self.country_names:
             contact = self.data.contact_data[country]["HOME"] + self.data.contact_data[country]["SCHOOL"] + \
                       self.data.contact_data[country]["WORK"] + self.data.contact_data[country]["OTHER"]
 
-            age_vector = self.data.age_data[country]["age"].flatten()
+            age_vector = self.data.age_data[country]["age"].reshape((-1, 1))
 
             # create the age group
             age_group = np.array([np.sum(age_vector[age[i][0]:(age[i][1] + 1)]) for i in range(len(age))])
             self.data.age_data[country]["age"] = age_group
             self.age_group = np.array([age_group]).reshape((-1, 1))
 
+            # aggregation method to transform age contact matrix from 16 * 16 to 6 * 6
+            # entries for age groups in 6 * 6 that correspond to that in 16 * 16 remain unchanged
             t_contact = contact * age_vector
             c = np.zeros(shape=(6, 6))
             for i in range(len(age)):
                 for j in range(len(age)):
                     c[i, j] = np.sum(t_contact[age[i][0]:(age[i][1] + 1), age[j][0]:(age[j][1] + 1)])
-            matrix = c / self.age_group
+
+            matrix = c / age_group   # symmetric
 
             simulation = Simulation(data=self.data, base_r0=self.base_r0, contact_matrix=matrix,
-                                    age_vector=age_group, susceptibility=susceptibility,
+                                    age_vector=self.age_group, susceptibility=susceptibility,
                                     country=country)
             # Create dictionary with the needed data
             self.full_contacts.update(
                 {country: {"beta": simulation.beta,
-                           "age_vector": self.age_group,
+                           "age_vector": age_group,
                            "contact_full": matrix}
                  })
+
             # Create separated data structure for (2D)^2 PCA
             self.data_cm_d2pca_col.append(simulation.beta * matrix)
             self.data_cm_d2pca_r.append(simulation.beta * matrix)
