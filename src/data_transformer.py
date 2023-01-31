@@ -32,7 +32,7 @@ class Contacts:
     def get_contacts(self):
         age = [(0, 0), (1, 2), (3, 3), (4, 4), (5, 12), (13, 15)]
 
-        age_vector = [self.data.age_data[country]["age"].flatten() for country in self.country_names]
+        age_vector = self.data.age_data["Kenya"]["age"].flatten()
 
         # procedure to aggregate params to the desired 6 * 6 age group from 16 * 16
         p, x, m, h = (np.zeros(len(age)), np.zeros(len(age)), np.zeros(len(age)), np.zeros(len(age)))
@@ -44,6 +44,7 @@ class Contacts:
             m[i] = np.sum(age_i * ps['mu'][age[i][0]]) / np.sum(age_i)
             h[i] = np.sum(age_i * ps['h'][age[i][0]]) / np.sum(age_i)
         self.data.model_parameters_data.update({"p": p, "mu": m, "xi": x, "h": h})
+        print(self.data.model_parameters_data)
 
         susceptibility = np.array([1.0] * 6)
         susceptibility[:3] = self.susc

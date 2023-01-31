@@ -58,15 +58,17 @@ def kenya_contacts(data_tr):
     plt.figure(figsize=(13, 12))
     full = plt.imshow(data_tr.full_contacts['Kenya']['contact_full'],
                       cmap='jet', alpha=.9, interpolation="nearest", vmin=0, vmax=16)
+
     ticks = np.arange(0, 6)
-    cbar = plt.colorbar(full, shrink=0.5)
-    tick_font_size = 24
+    cbar = plt.colorbar(full, shrink=0.87)
+    tick_font_size = 40
     cbar.ax.tick_params(labelsize=tick_font_size)
-    plt.xticks(ticks=ticks, labels=age_group, rotation=45, fontsize=28)
-    plt.yticks(ticks=ticks, labels=age_group, rotation=0, fontsize=28)
+    plt.xticks(ticks=ticks, labels=age_group, rotation=90, fontsize=32)
+    plt.yticks(ticks=ticks, labels=age_group, rotation=0, fontsize=32)
     plt.gca().invert_yaxis()
-    plt.xlabel("Age", fontsize=28)
-    plt.ylabel("Age", fontsize=28)
+    # plt.xlabel("Age", fontsize=28)
+    # plt.ylabel("Age", fontsize=28)
+    #plt.title("Other", fontsize=40)
     plt.savefig("../plots/" + "All.pdf")  # here you create plots for contacts at home, school, work, other, and all
     # by manipulating contact in data_transformer.py
 
@@ -107,7 +109,7 @@ def main():
     # ind.plot_countries()
 
     # kenya_contacts(data_tr=data_tr)
-    country_contacts(data_tr=data_tr)
+    #country_contacts(data_tr=data_tr)
 
     # do analysis for original data
     #Analysis(data_tr=data_tr, pca_data=ind.pca_data,

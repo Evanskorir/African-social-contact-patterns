@@ -1,0 +1,118 @@
+{
+    "p": {
+        "value": [
+            0.95,
+            0.95,
+            0.9,
+            0.9,
+            0.85,
+            0.85,
+            0.85,
+            0.85,
+            0.85,
+            0.85,
+            0.85,
+            0.85,
+            0.8,
+            0.8,
+            0.8
+        ],
+        "description": "Probability of asymptomatic course"
+    },
+    "xi": {
+        "value": [
+            0.1766381766,
+            0.1766381766,
+            0.1766381766,
+            0.1766381766,
+            0.31919192,
+            0.31919192,
+            0.31919192,
+            0.31919192,
+            0.314229249,
+            0.314229249,
+            0.314229249,
+            0.3730929265,
+            0.3730929265,
+            0.3730929265,
+            0.4063437909,
+            0.4652466368
+        ],
+        "description": "Probability of intensive care (given hospitalization)"
+    },
+    "mu": {
+        "value": [
+            0.00195,
+            0.00195,
+            0.00195,
+            0.00565,
+            0.00565,
+            0.00565,
+            0.011329,
+            0.011329,
+            0.011329,
+            0.011329,
+            0.02,
+            0.02,
+            0.02,
+            0.038,
+            0.038,
+            0.074
+        ],
+        "description": "Probability of fatal outcome"
+    },
+    "h": {
+        "value": [
+            0.0205,
+            0.0205,
+            0.0205,
+            0.0205,
+            0.1755,
+            0.1755,
+            0.1755,
+            0.1755,
+            0.2475,
+            0.2475,
+            0.2475,
+            0.253,
+            0.253,
+            0.253,
+            0.3605,
+            0.3605,
+            0.477
+        ],
+        "description": "Probability of hospitalization (or intensive care)"
+    },
+    "alpha_l": {
+        "value": 0.3125,
+        "description": "Reciprocal of latent period"
+    },
+    "alpha_p": {
+        "value": 0.5,
+        "description": "Reciprocal of pre-symptomatic (infectious) period"
+    },
+    "gamma_a": {
+        "value": 0.3333333333333333,
+        "description": "Reciprocal of infectious period of Ia"
+    },
+    "gamma_s": {
+        "value": 0.3333333333333333,
+        "description": "Reciprocal of infectious period of Is"
+    },
+    "gamma_h": {
+        "value": 0.1,
+        "description": "Reciprocal of hospitalization period"
+    },
+    "gamma_c": {
+        "value": 0.1,
+        "description": "Reciprocal of time on intensive care until transition to D/Icr"
+    },
+    "gamma_cr": {
+        "value": 0.07142857142857142,
+        "description": "Reciprocal of recovery time from Icr"
+    },
+    "inf_a": {
+        "value": 0.5,
+        "description": "Relative infectousness of Ia vs. Is"
+    }
+}
