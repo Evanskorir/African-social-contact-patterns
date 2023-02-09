@@ -54,31 +54,32 @@ class Analysis:
 
 
 def kenya_contacts(data_tr):
+    #plt.figure(figsize=(13, 12))
     age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
-    plt.figure(figsize=(13, 12))
-    full = plt.imshow(data_tr.full_contacts['Kenya']['contact_full'],
-                      cmap='jet', alpha=.9, interpolation="nearest", vmin=0, vmax=16)
+    for typ in ["contact_home", "contact_school", "contact_work", "contact_other", "contact_full"]:
+        img = plt.imshow(data_tr.setting_contacts['Kenya'][typ],
+                         cmap='jet', vmin=0, vmax=16, alpha=.9, interpolation="nearest")
+        ticks = np.arange(0, 6)
+        plt.xticks(ticks=ticks, labels=age_group, rotation=90, fontsize=32)
+        plt.yticks(ticks=ticks, labels=age_group, rotation=0, fontsize=32)
+        plt.gca().invert_yaxis()
+        if typ == 'contact_full':
+            cbar = plt.colorbar(img, shrink=0.87)
+            tick_font_size = 40
+            cbar.ax.tick_params(labelsize=tick_font_size)
 
-    ticks = np.arange(0, 6)
-    cbar = plt.colorbar(full, shrink=0.87)
-    tick_font_size = 40
-    cbar.ax.tick_params(labelsize=tick_font_size)
-    plt.xticks(ticks=ticks, labels=age_group, rotation=90, fontsize=32)
-    plt.yticks(ticks=ticks, labels=age_group, rotation=0, fontsize=32)
-    plt.gca().invert_yaxis()
-    # plt.xlabel("Age", fontsize=28)
-    # plt.ylabel("Age", fontsize=28)
-    #plt.title("Other", fontsize=40)
-    #plt.show()
-    #plt.savefig("../plots/" + "All.pdf")  # here you create plots for contacts at home, school, work, other, and all
-    # by manipulating contact in data_transformer.py
+        plt.xticks(ticks, fontsize=24)
+        plt.yticks(ticks, fontsize=24)
+        plt.show()
+        #plt.savefig("../plots/" + "kenya_" + typ.split("contact_")[1] + ".pdf")
 
 
 def country_contacts(data_tr):
-    plt.figure(figsize=(12, 10))
+    #plt.figure(figsize=(12, 10))
     for country in ["Zimbabwe", "Mauritania", "Sierra Leone"]:
         age_group = ["0-4", "5-14", "15-19", "20-24", "25-64", "65+"]
-        matrix_to_plot = data_tr.full_contacts[country]["contact_full"].T * data_tr.full_contacts[country]["beta"]
+        matrix_to_plot = data_tr.setting_contacts[country]["contact_full"].T * \
+                         data_tr.setting_contacts[country]["beta"]
         img = plt.imshow(matrix_to_plot.T,
                          cmap='jet', vmin=0, vmax=0.7,
                          alpha=.9, interpolation="nearest")
@@ -91,7 +92,7 @@ def country_contacts(data_tr):
             tick_font_size = 25
             cbar.ax.tick_params(labelsize=tick_font_size)
         #plt.savefig("../plots/" + country + ".pdf")
-        #plt.show()
+        plt.show()
 
 
 def main():
@@ -110,8 +111,8 @@ def main():
     #ind.dendogram_pca()
     #ind.plot_countries()
 
-    #kenya_contacts(data_tr=data_tr)
-    #country_contacts(data_tr=data_tr)
+    # kenya_contacts(data_tr=data_tr)
+    country_contacts(data_tr=data_tr)
 
     # do analysis for original data
     #Analysis(data_tr=data_tr, pca_data=ind.pca_data,
