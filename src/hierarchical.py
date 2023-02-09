@@ -20,7 +20,7 @@ class Hierarchical:
         elif dist == "manhattan":
             self.get_distance_matrix = self.get_manhattan_distance
 
-        os.makedirs("../plots", exist_ok=True)
+        #os.makedirs("../plots", exist_ok=True)
 
     def get_manhattan_distance(self):
         """
@@ -64,7 +64,8 @@ class Hierarchical:
         cbar = plt.colorbar(az)
         tick_font_size = 110
         cbar.ax.tick_params(labelsize=tick_font_size)
-        plt.savefig("../plots/" + self.img_prefix + "_" + "distances.pdf")
+        #plt.savefig("../plots/" + self.img_prefix + "_" + "distances.pdf")
+        plt.show()
 
     def run(self, threshold: float):
         # calculate ordered distance matrix
@@ -112,8 +113,8 @@ class Hierarchical:
         cbar = plt.colorbar(az)
         tick_font_size = 115
         cbar.ax.tick_params(labelsize=tick_font_size)
-
-        plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
+        #plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
+        plt.show()
 
     def plot_dendrogram(self, res):
         fig, axes = plt.subplots(1, 1, figsize=(35, 25), dpi=150)
@@ -128,10 +129,11 @@ class Hierarchical:
         plt.title('Cluster Analysis without threshold', fontsize=50, fontweight="bold")
         plt.ylabel('Distance between Clusters', fontsize=45)
         plt.tight_layout()
-        plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_2.pdf")
+        #plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_2.pdf")
+        plt.show()
 
     def plot_dendrogram_with_threshold(self, res, threshold):
-        fig, axes = plt.subplots(1, 1, figsize=(35, 25), dpi=300)
+        fig, axes = plt.subplots(1, 1, figsize=(30, 25), dpi=300)
         sch.dendrogram(res,
                        color_threshold=threshold,  # sets the color of the links above the color_threshold
                        leaf_rotation=90,
@@ -147,4 +149,5 @@ class Hierarchical:
         plt.ylabel('Distance between Clusters', fontsize=30)
         plt.tight_layout()
         axes.tick_params(axis='both', which='major', labelsize=26)
-        plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_3.pdf")
+        #plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_3.pdf")
+        plt.show()

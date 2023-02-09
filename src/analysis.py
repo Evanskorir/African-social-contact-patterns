@@ -69,7 +69,8 @@ def kenya_contacts(data_tr):
     # plt.xlabel("Age", fontsize=28)
     # plt.ylabel("Age", fontsize=28)
     #plt.title("Other", fontsize=40)
-    plt.savefig("../plots/" + "All.pdf")  # here you create plots for contacts at home, school, work, other, and all
+    #plt.show()
+    #plt.savefig("../plots/" + "All.pdf")  # here you create plots for contacts at home, school, work, other, and all
     # by manipulating contact in data_transformer.py
 
 
@@ -89,7 +90,8 @@ def country_contacts(data_tr):
             cbar = plt.colorbar(img, shrink=0.6)
             tick_font_size = 25
             cbar.ax.tick_params(labelsize=tick_font_size)
-        plt.savefig("../plots/" + country + ".pdf")
+        #plt.savefig("../plots/" + country + ".pdf")
+        #plt.show()
 
 
 def main():
@@ -104,11 +106,11 @@ def main():
     # execute class indicators
     ind = Indicators(data_tr=data_tr, country_names=data_tr.country_names)
     ind.pca_apply()
-    # ind.corr_pcs()
-    # ind.dendogram_pca()
-    # ind.plot_countries()
+    #ind.corr_pcs()
+    #ind.dendogram_pca()
+    #ind.plot_countries()
 
-    # kenya_contacts(data_tr=data_tr)
+    #kenya_contacts(data_tr=data_tr)
     #country_contacts(data_tr=data_tr)
 
     # do analysis for original data
