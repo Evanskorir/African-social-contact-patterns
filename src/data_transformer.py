@@ -44,7 +44,6 @@ class Contacts:
             m[i] = np.sum(age_i * ps['mu'][age[i][0]]) / np.sum(age_i)
             h[i] = np.sum(age_i * ps['h'][age[i][0]]) / np.sum(age_i)
         self.data.model_parameters_data.update({"p": p, "mu": m, "xi": x, "h": h})
-        print(self.data.model_parameters_data)
 
         susceptibility = np.array([1.0] * 6)
         susceptibility[:3] = self.susc

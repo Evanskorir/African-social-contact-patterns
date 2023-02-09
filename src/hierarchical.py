@@ -1,5 +1,3 @@
-import os
-
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
@@ -20,7 +18,7 @@ class Hierarchical:
         elif dist == "manhattan":
             self.get_distance_matrix = self.get_manhattan_distance
 
-        #os.makedirs("../plots", exist_ok=True)
+        # os.makedirs("../plots", exist_ok=True)
 
     def get_manhattan_distance(self):
         """
@@ -64,23 +62,8 @@ class Hierarchical:
         cbar = plt.colorbar(az)
         tick_font_size = 110
         cbar.ax.tick_params(labelsize=tick_font_size)
-        #plt.savefig("../plots/" + self.img_prefix + "_" + "distances.pdf")
+        # plt.savefig("../plots/" + self.img_prefix + "_" + "distances.pdf")
         plt.show()
-
-    def run(self, threshold: float):
-        # calculate ordered distance matrix
-        columns, dt, res = self.calculate_ordered_distance_matrix(threshold=threshold)
-
-        # plot ordered distance matrix
-        self.plot_ordered_distance_matrix(columns=columns, dt=dt)
-
-        #  Original uncolored Dendrogram
-        self.plot_dendrogram(res=res)
-
-        #  Colored Dendrogram based on threshold (4 clusters)
-        # cutting the dendrogram where the gap between two successive merges is at the largest.
-        #  horizontal   line is drawn   through it.
-        self.plot_dendrogram_with_threshold(res=res, threshold=threshold)
 
     def calculate_ordered_distance_matrix(self, threshold, verbose: bool = True):
         dt, distance = self.get_distance_matrix()
@@ -100,7 +83,8 @@ class Hierarchical:
         dt = dt.reindex(columns, axis='columns')
         return columns, dt, res
 
-    def plot_ordered_distance_matrix(self, columns, dt):
+    @staticmethod
+    def plot_ordered_distance_matrix(columns, dt):
         plt.figure(figsize=(45, 35), dpi=300)
         az = plt.imshow(dt, cmap='jet',
                         alpha=.9, interpolation="nearest")
@@ -113,7 +97,7 @@ class Hierarchical:
         cbar = plt.colorbar(az)
         tick_font_size = 115
         cbar.ax.tick_params(labelsize=tick_font_size)
-        #plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
+        # plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
         plt.show()
 
     def plot_dendrogram(self, res):
@@ -129,7 +113,7 @@ class Hierarchical:
         plt.title('Cluster Analysis without threshold', fontsize=50, fontweight="bold")
         plt.ylabel('Distance between Clusters', fontsize=45)
         plt.tight_layout()
-        #plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_2.pdf")
+        # plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_2.pdf")
         plt.show()
 
     def plot_dendrogram_with_threshold(self, res, threshold):
@@ -149,5 +133,5 @@ class Hierarchical:
         plt.ylabel('Distance between Clusters', fontsize=30)
         plt.tight_layout()
         axes.tick_params(axis='both', which='major', labelsize=26)
-        #plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_3.pdf")
+        # plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_3.pdf")
         plt.show()
