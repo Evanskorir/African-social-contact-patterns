@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.decomposition import PCA
 
@@ -63,20 +62,3 @@ class Analysis:
         else:
             raise Exception("The indicators could not be incorporated.")
         self.data_tr.data_clustering = data_pca2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
