@@ -4,7 +4,7 @@ from src.dataloader import DataLoader
 from src.simulation import Simulation
 
 
-class Contacts:
+class ContactMatrixGenerator:
     def __init__(self, susc: float = 1.0, base_r0: float = 3.68):
         self.data = DataLoader()
         self.country_names = list(self.data.age_data.keys())
@@ -27,9 +27,9 @@ class Contacts:
         self.indicator_data = []
         self.data_cm_1dpca = []
 
-        self.get_contacts()
+        self.run()
 
-    def get_contacts(self):
+    def run(self):
         age = [(0, 0), (1, 2), (3, 3), (4, 4), (5, 12), (13, 15)]
 
         age_vector = self.data.age_data["Kenya"]["age"].flatten()
@@ -53,12 +53,13 @@ class Contacts:
             all_contact = self.data.contact_data[country]["HOME"] + self.data.contact_data[country]["SCHOOL"] + \
                       self.data.contact_data[country]["WORK"] + self.data.contact_data[country]["OTHER"]
             # contact for each setting and all settings
-            h_contact, s_contact, w_contact, o_contact, f_contact = [self.data.contact_data[country]["HOME"],
-                                                                     self.data.contact_data[country]["SCHOOL"],
-                                                                     self.data.contact_data[country]["WORK"],
-                                                                     self.data.contact_data[country]["OTHER"],
-                                                                     all_contact
-                                                                     ]
+            h_contact, s_contact, w_contact, o_contact, f_contact = [
+                self.data.contact_data[country]["HOME"],
+                self.data.contact_data[country]["SCHOOL"],
+                self.data.contact_data[country]["WORK"],
+                self.data.contact_data[country]["OTHER"],
+                all_contact
+            ]
 
             age_vector = self.data.age_data[country]["age"].reshape((-1, 1))
             # create the age group
@@ -71,22 +72,15 @@ class Contacts:
 
             h, s, w, o, a = (np.zeros(shape=(6, 6)), np.zeros(shape=(6, 6)), np.zeros(shape=(6, 6)),
                              np.zeros(shape=(6, 6)), np.zeros(shape=(6, 6)))
-            home_contact, school_contact, work_contact, other_contact, all_contact, = [h_contact, s_contact,
-                                                                                       w_contact, o_contact,
-                                                                                       f_contact] * age_vector
+            home_contact, school_contact, work_contact, other_contact, all_contact, = \
+                np.array([h_contact, s_contact, w_contact, o_contact, f_contact]) * age_vector
             for i in range(len(age)):
                 for j in range(len(age)):
-                    h[i, j], s[i, j], w[i, j], o[i, j], a[i, j] = [np.sum(home_contact[age[i][0]:(age[i][1] + 1),
-                                                                          age[j][0]:(age[j][1] + 1)]),
-                                                                   np.sum(school_contact[age[i][0]:(age[i][1] + 1),
-                                                                          age[j][0]:(age[j][1] + 1)]),
-                                                                   np.sum(work_contact[age[i][0]:(age[i][1] + 1),
-                                                                          age[j][0]:(age[j][1] + 1)]),
-                                                                   np.sum(other_contact[age[i][0]:(age[i][1] + 1),
-                                                                          age[j][0]:(age[j][1] + 1)]),
-                                                                   np.sum(all_contact[age[i][0]:(age[i][1] + 1),
-                                                                          age[j][0]:(age[j][1] + 1)])]
-            home, school, work, other, full = [h, s, w, o, a] / age_group
+                    for mtx, c_mtx in zip(
+                            [h, s, w, o, a],
+                            [home_contact, school_contact, work_contact, other_contact, all_contact]):
+                        mtx[i, j] = np.sum(c_mtx[age[i][0]:(age[i][1] + 1), age[j][0]:(age[j][1] + 1)])
+            home, school, work, other, full = np.array([h, s, w, o, a]) / age_group
 
             simulation = Simulation(data=self.data, base_r0=self.base_r0, contact_matrix=full,
                                     age_vector=self.age_group, susceptibility=susceptibility,

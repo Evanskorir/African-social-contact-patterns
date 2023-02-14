@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn import preprocessing
 
-from src.data_transformer import Contacts
+from src.contact_matrix_generator import ContactMatrixGenerator
 
 
 class D2PCA:
@@ -12,12 +12,12 @@ class D2PCA:
         input: 39 countries each 16 * 16 matrix concatenated row wise and column wise
         output: 39 countries each 2 * 2 matrix, and 39 * 4 (2 * 2 flatten matrix)
     """
-    def __init__(self, data_tr: Contacts, country_names: list):
+    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: list):
         self.country_names = country_names
-        self.data_tr = data_tr
+        self.c_mtx_gen = c_mtx_gen
 
-        self.data_contact_matrix = data_tr.data_cm_d2pca_column
-        self.contact_matrix_transposed = data_tr.data_cm_d2pca_row
+        self.data_contact_matrix = c_mtx_gen.data_cm_d2pca_column
+        self.contact_matrix_transposed = c_mtx_gen.data_cm_d2pca_row
 
         self.data_split = []
         self.proj_matrix_2 = []
@@ -63,7 +63,7 @@ class D2PCA:
         proj_matrix_2 = pca_2.components_.T  # 6 * row_dim projection matrix 2
         return proj_matrix_2
 
-    def apply_dpca(self):
+    def run(self):
         # Now split concatenated original data into 39 sub-arrays of equal size i.e. 32 countries.
         data_scaled = self.preprocess_data(data=self.data_contact_matrix)
         split = np.array_split(data_scaled, 32)

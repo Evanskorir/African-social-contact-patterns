@@ -4,13 +4,13 @@ import pandas as pd
 import scipy.cluster.hierarchy as sch
 from sklearn.metrics.pairwise import euclidean_distances, manhattan_distances
 
-from src.data_transformer import Contacts
+from src.contact_matrix_generator import ContactMatrixGenerator
 
 
 class Hierarchical:
-    def __init__(self, data_transformer: Contacts, country_names: np.ndarray, img_prefix: str,
+    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: np.ndarray, img_prefix: str,
                  dist: str = "euclidean"):
-        self.data_tr = data_transformer
+        self.c_mtx_gen = c_mtx_gen
         self.country_names = country_names
         self.img_prefix = img_prefix
         if dist == "euclidean":
@@ -25,7 +25,7 @@ class Hierarchical:
         Calculates Manhattan distance of a 39 * 136 matrix and returns 39*39 distance matrix
         :return matrix: square distance matrix with zero diagonals
         """
-        manhattan_distance = manhattan_distances(self.data_tr.data_clustering)  # get pairwise manhattan distance
+        manhattan_distance = manhattan_distances(self.c_mtx_gen.data_clustering)  # get pairwise manhattan distance
         # convert the data into dataframe
         # replace the indexes of the distance with the country names
         # rename the columns and rows of the distance with country names and return a matrix distance
@@ -39,14 +39,14 @@ class Hierarchical:
         :return matrix: square distance matrix with zero diagonals
         """
         # convert the data into dataframe
-        euc_distance = euclidean_distances(self.data_tr.data_clustering)
+        euc_distance = euclidean_distances(self.c_mtx_gen.data_clustering)
         dt = pd.DataFrame(euc_distance,
                           index=self.country_names, columns=self.country_names)  # rename rows and columns
         return dt, euc_distance
 
     def plot_distances(self):
         distance, _ = self.get_distance_matrix()
-        self.country_names = self.data_tr.country_names
+        self.country_names = self.c_mtx_gen.country_names
         plt.figure(figsize=(44, 34))
         plt.xticks(ticks=np.arange(len(self.country_names)),
                    labels=self.country_names,

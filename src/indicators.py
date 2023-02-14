@@ -6,23 +6,23 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
-from src.data_transformer import Contacts
+from src.contact_matrix_generator import ContactMatrixGenerator
 
 
 class Indicators:
     pca_data = []
 
-    def __init__(self, data_tr: Contacts, country_names: list):
+    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: list):
         self.country_names = country_names
-        self.data_tr = data_tr
-        self.indicator_data = data_tr.indicator_data
+        self.c_mtx_gen = c_mtx_gen
+        self.indicator_data = c_mtx_gen.indicator_data
         self.pca_data = np.array([])
         self.pca2 = PCA(n_components=4, svd_solver='randomized', random_state=50)
 
     def pca_apply(self):
         # Standardization technique for scaling
         scaler = StandardScaler()
-        country_data_scaled = scaler.fit_transform(self.data_tr.indicator_data)
+        country_data_scaled = scaler.fit_transform(self.c_mtx_gen.indicator_data)
         pca = PCA(svd_solver='randomized', random_state=50)
         pca.fit(country_data_scaled)
         self.pca_data = self.pca2.fit_transform(country_data_scaled)
@@ -50,7 +50,7 @@ class Indicators:
     def corr_data(self):
         # Let's check the correlation coefficients to see which variables are highly correlated
         plt.figure(figsize=(18, 18))
-        country = self.data_tr.indicator_data.iloc[:, 1:]
+        country = self.c_mtx_gen.indicator_data.iloc[:, 1:]
         sns.heatmap(country.corr(), cmap="rainbow")
         plt.savefig("../plots/" + "corr.pdf")
 
@@ -59,7 +59,7 @@ class Indicators:
         fig, axes = plt.subplots(1, 1, figsize=(40, 25), dpi=150)
         sch.dendrogram(sch.linkage(self.pca_data, method="complete"), color_threshold=8, get_leaves=True,
                        leaf_rotation=90, leaf_font_size=32, show_leaf_counts=True, orientation="top",
-                       distance_sort=True, labels=self.data_tr.country_names)
+                       distance_sort=True, labels=self.c_mtx_gen.country_names)
         plt.title('Hierarchical Clustering Dendrogram', fontsize=44, fontweight="bold")
         plt.ylabel('Distance between Clusters', fontsize=42, fontweight="bold")
         axes.tick_params(axis='both', which='major', labelsize=26)
@@ -70,10 +70,10 @@ class Indicators:
         _ = plt.gca()
         ax = plt.imshow(self.pca2.components_, cmap='jet',
                         alpha=.9, interpolation="nearest")
-        feature_names = list(pd.DataFrame(self.data_tr.indicator_data).columns)
+        feature_names = list(pd.DataFrame(self.c_mtx_gen.indicator_data).columns)
         plt.colorbar(ax, orientation='horizontal', ticks=[self.pca2.components_.min(), 0,
                                                           self.pca2.components_.max()], pad=0.6)
-        plt.xticks(ticks=np.arange(len(pd.DataFrame(self.data_tr.indicator_data).columns)), labels=feature_names,
+        plt.xticks(ticks=np.arange(len(pd.DataFrame(self.c_mtx_gen.indicator_data).columns)), labels=feature_names,
                    rotation=90, fontsize=20)
         plt.yticks(ticks=np.arange(0, 4),
                    labels=['PC1', 'PC2', 'PC3', 'PC4'], rotation=0, fontsize=20)
