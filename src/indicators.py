@@ -12,10 +12,13 @@ from src.contact_matrix_generator import ContactMatrixGenerator
 class Indicators:
     pca_data = []
 
-    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: list):
+    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: list,
+                 to_print: bool = False, to_export_plot: bool = False):
         self.country_names = country_names
         self.c_mtx_gen = c_mtx_gen
         self.indicator_data = c_mtx_gen.indicator_data
+        self.to_print = to_print
+        self.to_export_plot = to_export_plot
         self.pca_data = np.array([])
         self.pca2 = PCA(n_components=4, svd_solver='randomized', random_state=50)
 
@@ -39,29 +42,23 @@ class Indicators:
         plt.bar(range(1, len(pca.explained_variance_ratio_) + 1), pca.explained_variance_ratio_)
         plt.xlabel("PCA Components", fontweight='bold', fontsize=18)
         plt.ylabel("Variance Ratio", fontweight='bold', fontsize=18)
-        # plt.savefig("../plots/" + "variance.pdf")
-        # plt.show()
-
-        # Scree plot to visualize the Cumulative variance against the Number of components
-        # plt.figure(figsize=(10, 6))
-        # plt.plot(np.cumsum(pca.explained_variance_ratio_))
-        # plt.vlines(x=3, ymax=1, ymin=0, colors="r", linestyles="--")
-        # plt.hlines(y=0.61, xmax=15, xmin=0, colors="g", linestyles="--")
-        # plt.xlabel('Number of PCA components')
-        # plt.ylabel('Cumulative Explained Variance')
-        # plt.savefig("../plots/" + "exp variance.pdf")
-        # plt.show()
+        if self.to_export_plot:
+            plt.savefig("../plots/" + "variance.pdf")
+        else:
+            plt.show()
 
         # Let's check the variance ratios
-        # print("\n cumulative variance explained by indicators:", np.cumsum(self.pca2.explained_variance_ratio_))
-        # print("\n explained variance explained by indicator:", self.pca2.explained_variance_ratio_)
+        if self.to_print:
+            print("\n cumulative variance explained by indicators:", np.cumsum(self.pca2.explained_variance_ratio_))
+            print("\n explained variance explained by indicator:", self.pca2.explained_variance_ratio_)
 
     def corr_data(self):
         # Let's check the correlation coefficients to see which variables are highly correlated
         plt.figure(figsize=(18, 18))
         country = self.c_mtx_gen.indicator_data.iloc[:, 1:]
         sns.heatmap(country.corr(), cmap="rainbow")
-        plt.savefig("../plots/" + "corr.pdf")
+        if self.to_export_plot:
+            plt.savefig("../plots/" + "corr.pdf")
 
     def dendogram_pca(self):
         # Hierarchical clustering based on only the indicators
@@ -72,8 +69,10 @@ class Indicators:
         plt.title('Hierarchical Clustering Dendrogram', fontsize=44, fontweight="bold")
         plt.ylabel('Distance between Clusters', fontsize=42, fontweight="bold")
         axes.tick_params(axis='both', which='major', labelsize=26)
-        # plt.savefig("../plots/" + "Dendrogram.pdf")
-        plt.show()
+        if self.to_export_plot:
+            plt.savefig("../plots/" + "Dendrogram.pdf")
+        else:
+            plt.show()
 
     def corr_pcs(self):
         scaler = StandardScaler()
@@ -93,8 +92,10 @@ class Indicators:
         plt.yticks(ticks=np.arange(0, 4),
                    labels=['PC1', 'PC2', 'PC3', 'PC4'], rotation=0, fontsize=20)
 
-        # plt.savefig("../plots/" + "components.pdf")
-        plt.show()
+        if self.to_export_plot:
+            plt.savefig("../plots/" + "components.pdf")
+        else:
+            plt.show()
 
     def plot_countries(self):
         # Params
@@ -141,5 +142,7 @@ class Indicators:
         # Add the axis labels
         plt.xlabel('First Dim (34.4%)', fontsize=20)
         plt.ylabel('Second Dim (10.6%)', fontsize=20)
-        # plt.savefig("../plots/" + "countries projection.pdf")
-        plt.show()
+        if self.to_export_plot:
+            plt.savefig("../plots/" + "countries projection.pdf")
+        else:
+            plt.show()

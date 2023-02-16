@@ -54,12 +54,11 @@ class D2PCA:
 
         pca_2 = PCA(n_components=row_dim)
         pca_2.fit(data_scaled_2)
-
-        # print("Explained variance ratios row:", pca_2.explained_variance_ratio_,
-        #      "->", sum(pca_2.explained_variance_ratio_), "Eigenvectors row:",
-        #      pca_2.components_,  # (row_dim, 6)
-        #     "Singular values row:", pca_2.singular_values_)  # row_dim leading eigenvalues
-        # print("PC 2", pc2)
+        if self.to_print:
+            print("Explained variance ratios row:", pca_2.explained_variance_ratio_,
+                  "->", sum(pca_2.explained_variance_ratio_), "Eigenvectors row:",
+                  pca_2.components_,  # (row_dim, 6)
+                  "Singular values row:", pca_2.singular_values_)  # row_dim leading eigenvalues
 
         # Projection matrix for column direction matrix
         proj_matrix_2 = pca_2.components_.T  # 6 * row_dim projection matrix 2

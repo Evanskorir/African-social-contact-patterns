@@ -101,6 +101,7 @@ class Hierarchical:
         cbar = plt.colorbar(az)
         tick_font_size = 115
         cbar.ax.tick_params(labelsize=tick_font_size)
+
         # plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
         plt.show()
 
@@ -117,8 +118,10 @@ class Hierarchical:
         plt.title('Cluster Analysis without threshold', fontsize=50, fontweight="bold")
         plt.ylabel('Distance between Clusters', fontsize=45)
         plt.tight_layout()
-        # plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_2.pdf")
-        plt.show()
+        if self.to_export_plot:
+            plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_2.pdf")
+        else:
+            plt.show()
 
     def plot_dendrogram_with_threshold(self, res, threshold):
         fig, axes = plt.subplots(1, 1, figsize=(30, 25), dpi=300)
@@ -137,5 +140,7 @@ class Hierarchical:
         plt.ylabel('Distance between Clusters', fontsize=30)
         plt.tight_layout()
         axes.tick_params(axis='both', which='major', labelsize=26)
-        # plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_3.pdf")
-        plt.show()
+        if self.to_export_plot:
+            plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_3.pdf")
+        else:
+            plt.show()

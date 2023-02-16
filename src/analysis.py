@@ -10,13 +10,15 @@ from src.indicators import Indicators
 class Analysis:
     def __init__(self, c_mtx_gen: ContactMatrixGenerator, img_prefix, threshold,
                  n_components: int = 4,
-                 dim_red: str = None, distance: str = "euclidean"):
+                 dim_red: str = None, distance: str = "euclidean",
+                 to_print: bool = False):
         self.c_mtx_gen = c_mtx_gen
         self.dim_red = dim_red
         self.img_prefix = img_prefix
         self.threshold = threshold
         self.distance = distance
         self.n_components = n_components
+        self.to_print = to_print
         if dim_red is not None:
             self.apply_pca()
             self.contacts_apply_indicators()
@@ -35,9 +37,10 @@ class Analysis:
 
             # integrate indicators
             data_pca = np.append(data_pcaa, ind.pca_data, axis=1)  # dim 8
-            print("Explained variance ratios pca:",
-                  pca.explained_variance_ratio_,
-                  "->", sum(pca.explained_variance_ratio_))
+            if self.to_print:
+                print("Explained variance ratios pca:",
+                      pca.explained_variance_ratio_,
+                      "->", sum(pca.explained_variance_ratio_))
         elif self.dim_red == "2DPCA":
             data_dpca = D2PCA(country_names=self.c_mtx_gen.country_names, c_mtx_gen=self.c_mtx_gen)
             data_dpca.run()
