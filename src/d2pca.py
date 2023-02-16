@@ -1,5 +1,4 @@
 import numpy as np
-
 from sklearn.decomposition import PCA
 from sklearn import preprocessing
 
@@ -12,9 +11,11 @@ class D2PCA:
         input: 39 countries each 16 * 16 matrix concatenated row wise and column wise
         output: 39 countries each 2 * 2 matrix, and 39 * 4 (2 * 2 flatten matrix)
     """
-    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: list):
+    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: list,
+                 to_print: bool = False):
         self.country_names = country_names
         self.c_mtx_gen = c_mtx_gen
+        self.to_print = to_print
 
         self.data_contact_matrix = c_mtx_gen.data_cm_d2pca_column
         self.contact_matrix_transposed = c_mtx_gen.data_cm_d2pca_row
@@ -37,10 +38,11 @@ class D2PCA:
         pca_1 = PCA(n_components=col_dim)
         pca_1.fit(data_scaled)
 
-        # print("Explained variance ratios col:", pca_1.explained_variance_ratio_,
-        #      "->", sum(pca_1.explained_variance_ratio_), "Eigenvectors col:",
-        #     pca_1.components_,  # (col_dim, 6)
-        #      "Singular values col:", pca_1.singular_values_)  # col_dim leading eigenvalues
+        if self.to_print:
+            print("Explained variance ratios col:", pca_1.explained_variance_ratio_,
+                  "->", sum(pca_1.explained_variance_ratio_), "Eigenvectors col:",
+                  pca_1.components_,  # (col_dim, 6)
+                  "Singular values col:", pca_1.singular_values_)  # col_dim leading eigenvalues
 
         # Projection matrix for row direction matrix
         proj_matrix_1 = pca_1.components_.T  # 6 * col_dim projection matrix 1

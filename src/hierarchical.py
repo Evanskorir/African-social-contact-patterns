@@ -8,17 +8,19 @@ from src.contact_matrix_generator import ContactMatrixGenerator
 
 
 class Hierarchical:
-    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: np.ndarray, img_prefix: str,
-                 dist: str = "euclidean"):
+    def __init__(self, c_mtx_gen: ContactMatrixGenerator, country_names: np.ndarray,
+                 img_prefix: str,
+                 dist: str = "euclidean",
+                 to_export_plot: bool = False):
         self.c_mtx_gen = c_mtx_gen
         self.country_names = country_names
         self.img_prefix = img_prefix
+        self.to_export_plot = to_export_plot
+
         if dist == "euclidean":
             self.get_distance_matrix = self.get_euclidean_distance
         elif dist == "manhattan":
             self.get_distance_matrix = self.get_manhattan_distance
-
-        # os.makedirs("../plots", exist_ok=True)
 
     def get_manhattan_distance(self):
         """
@@ -62,8 +64,10 @@ class Hierarchical:
         cbar = plt.colorbar(az)
         tick_font_size = 110
         cbar.ax.tick_params(labelsize=tick_font_size)
-        # plt.savefig("../plots/" + self.img_prefix + "_" + "distances.pdf")
-        plt.show()
+        if self.to_export_plot:
+            plt.savefig("../plots/" + self.img_prefix + "_" + "distances.pdf")
+        else:
+            plt.show()
 
     def calculate_ordered_distance_matrix(self, threshold, verbose: bool = True):
         dt, distance = self.get_distance_matrix()
