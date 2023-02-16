@@ -27,25 +27,34 @@ class Indicators:
         pca.fit(country_data_scaled)
         self.pca_data = self.pca2.fit_transform(country_data_scaled)
 
+    def var_plot_ratio(self):
         # Variance Ratio bar plot for each PCA components.
+        scaler = StandardScaler()
+        country_data_scaled = scaler.fit_transform(self.c_mtx_gen.indicator_data)
+        pca = PCA(svd_solver='randomized', random_state=50)
+        pca.fit(country_data_scaled)
+        self.pca_data = self.pca2.fit_transform(country_data_scaled)
+
         plt.figure(figsize=(10, 8))
         plt.bar(range(1, len(pca.explained_variance_ratio_) + 1), pca.explained_variance_ratio_)
         plt.xlabel("PCA Components", fontweight='bold', fontsize=18)
         plt.ylabel("Variance Ratio", fontweight='bold', fontsize=18)
-        plt.savefig("../plots/" + "variance.pdf")
+        # plt.savefig("../plots/" + "variance.pdf")
+        # plt.show()
 
         # Scree plot to visualize the Cumulative variance against the Number of components
-        plt.figure(figsize=(10, 6))
-        plt.plot(np.cumsum(pca.explained_variance_ratio_))
-        plt.vlines(x=3, ymax=1, ymin=0, colors="r", linestyles="--")
-        plt.hlines(y=0.61, xmax=15, xmin=0, colors="g", linestyles="--")
-        plt.xlabel('Number of PCA components')
-        plt.ylabel('Cumulative Explained Variance')
-        plt.savefig("../plots/" + "exp variance.pdf")
+        # plt.figure(figsize=(10, 6))
+        # plt.plot(np.cumsum(pca.explained_variance_ratio_))
+        # plt.vlines(x=3, ymax=1, ymin=0, colors="r", linestyles="--")
+        # plt.hlines(y=0.61, xmax=15, xmin=0, colors="g", linestyles="--")
+        # plt.xlabel('Number of PCA components')
+        # plt.ylabel('Cumulative Explained Variance')
+        # plt.savefig("../plots/" + "exp variance.pdf")
+        # plt.show()
 
         # Let's check the variance ratios
-        print("\n cumulative variance explained by indicators:", np.cumsum(self.pca2.explained_variance_ratio_))
-        print("\n explained variance explained by indicator:", self.pca2.explained_variance_ratio_)
+        # print("\n cumulative variance explained by indicators:", np.cumsum(self.pca2.explained_variance_ratio_))
+        # print("\n explained variance explained by indicator:", self.pca2.explained_variance_ratio_)
 
     def corr_data(self):
         # Let's check the correlation coefficients to see which variables are highly correlated
@@ -63,9 +72,15 @@ class Indicators:
         plt.title('Hierarchical Clustering Dendrogram', fontsize=44, fontweight="bold")
         plt.ylabel('Distance between Clusters', fontsize=42, fontweight="bold")
         axes.tick_params(axis='both', which='major', labelsize=26)
-        plt.savefig("../plots/" + "Dendrogram.pdf")
+        # plt.savefig("../plots/" + "Dendrogram.pdf")
+        plt.show()
 
     def corr_pcs(self):
+        scaler = StandardScaler()
+        country_data_scaled = scaler.fit_transform(self.c_mtx_gen.indicator_data)
+        pca = PCA(svd_solver='randomized', random_state=50)
+        pca.fit(country_data_scaled)
+        self.pca_data = self.pca2.fit_transform(country_data_scaled)
         plt.figure(figsize=(14, 12))
         _ = plt.gca()
         ax = plt.imshow(self.pca2.components_, cmap='jet',
@@ -78,7 +93,8 @@ class Indicators:
         plt.yticks(ticks=np.arange(0, 4),
                    labels=['PC1', 'PC2', 'PC3', 'PC4'], rotation=0, fontsize=20)
 
-        plt.savefig("../plots/" + "components.pdf")
+        # plt.savefig("../plots/" + "components.pdf")
+        plt.show()
 
     def plot_countries(self):
         # Params
@@ -125,4 +141,5 @@ class Indicators:
         # Add the axis labels
         plt.xlabel('First Dim (34.4%)', fontsize=20)
         plt.ylabel('Second Dim (10.6%)', fontsize=20)
-        plt.savefig("../plots/" + "countries projection.pdf")
+        # plt.savefig("../plots/" + "countries projection.pdf")
+        plt.show()
