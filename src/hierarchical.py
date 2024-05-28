@@ -87,22 +87,21 @@ class Hierarchical:
         dt = dt.reindex(columns, axis='columns')
         return columns, dt, res
 
-    @staticmethod
-    def plot_ordered_distance_matrix(columns, dt):
+    def plot_ordered_distance_matrix(self, columns, dt):
         plt.figure(figsize=(45, 35), dpi=300)
         az = plt.imshow(dt, cmap='jet',
                         alpha=.9, interpolation="nearest")
         plt.xticks(ticks=np.arange(len(columns)),
                    labels=columns,
-                   rotation=90, fontsize=40)
+                   rotation=90, fontsize=45)
         plt.yticks(ticks=np.arange(len(columns)),
                    labels=columns,
-                   rotation=0, fontsize=40)
+                   rotation=0, fontsize=45)
         cbar = plt.colorbar(az)
         tick_font_size = 115
         cbar.ax.tick_params(labelsize=tick_font_size)
 
-        # plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
+        plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
         plt.show()
 
     def plot_dendrogram(self, res):
@@ -124,22 +123,44 @@ class Hierarchical:
             plt.show()
 
     def plot_dendrogram_with_threshold(self, res, threshold):
-        fig, axes = plt.subplots(1, 1, figsize=(30, 25), dpi=300)
-        sch.dendrogram(res,
+        fig, axes = plt.subplots(1, 1, figsize=(15, 12))
+        colors = ['blue', 'green', 'red']
+        default_color = 'black'
+        sch.set_link_color_palette(colors)
+
+        dendrogram = sch.dendrogram(res,
                        color_threshold=threshold,  # sets the color of the links above the color_threshold
                        leaf_rotation=90,
                        leaf_font_size=24,  # the size based on the number of nodes in the dendrogram.
                        show_leaf_counts=True,
                        labels=self.country_names,
-                       above_threshold_color='blue',
+                       above_threshold_color='black',
                        ax=axes,
                        orientation="top",
                        get_leaves=True,
                        distance_sort=True)
-        plt.title('Cluster Analysis', fontsize=49, fontweight="bold")
-        plt.ylabel('Distance between Clusters', fontsize=30)
+        plt.title('Hierarchical Clustering Dendrogram', fontsize=25, fontweight="bold")
+        plt.ylabel('Distance between Clusters', fontsize=20, fontweight="bold")
+        plt.xticks(rotation=90, fontsize=12)
+        plt.yticks(fontsize=15)
+        axes.tick_params(axis='both', which='major', labelsize=12)
+        plt.grid(axis='y', linestyle='--', alpha=0.5)
+        plt.axhline(y=200, color='gray', linestyle='--', linewidth=1)
+        plt.text(-20, 200, 'Threshold = 200', fontsize=10, color='gray')
+
+        if threshold > 3:
+            plt.plot([], [], color=default_color, label='Single Country',
+                     linewidth=5, alpha=0.8)
+
+        for i, color in enumerate(colors):
+
+            plt.plot([], [], color=color, label=f'Cluster {i + 1}', linewidth=5,
+                     alpha=0.8)
+        # plt.legend(loc='upper right', fontsize=15)
+
+        dendrogram_color = 'lightgray'
+        plt.axhspan(0, 200, facecolor=dendrogram_color, alpha=0.2)
         plt.tight_layout()
-        axes.tick_params(axis='both', which='major', labelsize=26)
         if self.to_export_plot:
             plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_3.pdf")
         else:
