@@ -93,15 +93,15 @@ class Hierarchical:
                         alpha=.9, interpolation="nearest")
         plt.xticks(ticks=np.arange(len(columns)),
                    labels=columns,
-                   rotation=90, fontsize=45)
+                   rotation=90, fontsize=43)
         plt.yticks(ticks=np.arange(len(columns)),
                    labels=columns,
-                   rotation=0, fontsize=45)
+                   rotation=0, fontsize=43)
         cbar = plt.colorbar(az)
         tick_font_size = 115
         cbar.ax.tick_params(labelsize=tick_font_size)
 
-        plt.savefig("../plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
+        plt.savefig("./plots/" + self.img_prefix + "_" + "ordered_distance_1.pdf")
         plt.show()
 
     def plot_dendrogram(self, res):
